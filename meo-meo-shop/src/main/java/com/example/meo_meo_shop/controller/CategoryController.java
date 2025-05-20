@@ -1,7 +1,7 @@
 package com.example.meo_meo_shop.controller;
 
 import com.example.meo_meo_shop.entity.Category;
-import com.example.meo_meo_shop.service.CategoryService;
+import com.example.meo_meo_shop.service.CategoryServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-    private final CategoryService service;
+    private final CategoryServiceImpl service;
 
-    public CategoryController(CategoryService service) {
+    public CategoryController(CategoryServiceImpl service) {
         this.service = service;
     }
 
