@@ -41,4 +41,5 @@ public class ProductCategoryServiceImpl extends AServiceImpl<ProductCategory, Lo
     public void deleteByCategoryId(Long categoryId) {
         productCategoryRepository.deleteByCategory_CategoryId(categoryId);
     }
+
 }
