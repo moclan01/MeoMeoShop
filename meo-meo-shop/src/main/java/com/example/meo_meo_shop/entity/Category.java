@@ -4,6 +4,8 @@ package com.example.meo_meo_shop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "categories")
 @Getter
@@ -16,4 +18,7 @@ public class Category {
     private long categoryId;
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductCategory> productCategories;
 }

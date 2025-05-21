@@ -3,6 +3,8 @@ package com.example.meo_meo_shop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "products")
 @Getter
@@ -14,13 +16,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
     private String name;
     private String description;
     private double price;
     private int stock;
+
+    @Column(name = "image_url")
     private String imageUrl;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductCategory> productCategories;
 }
