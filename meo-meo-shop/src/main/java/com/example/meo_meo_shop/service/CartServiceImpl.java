@@ -11,7 +11,7 @@ public class CartServiceImpl extends AServiceImpl<Cart, Long> implements IServic
     private final CartRepository cartRepository;
 
     public CartServiceImpl(CartRepository cartRepository) {
-        super(cartRepository); // truyền đúng kiểu JpaRepository<Cart, Long>
+        super(cartRepository);
         this.cartRepository = cartRepository;
     }
 
