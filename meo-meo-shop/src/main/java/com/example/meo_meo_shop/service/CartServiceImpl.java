@@ -20,10 +20,6 @@ public class CartServiceImpl extends AServiceImpl<Cart, Long> implements IServic
         Cart existing = cartRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cart not found with ID: " + id));
 
-        existing.setProduct(updatedCart.getProduct());
-        existing.setUser(updatedCart.getUser());
-        existing.setQuantity(updatedCart.getQuantity());
-
         return cartRepository.save(existing);
     }
 

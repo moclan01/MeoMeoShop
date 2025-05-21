@@ -19,9 +19,12 @@ public class ProductCategoryServiceImpl extends AServiceImpl<ProductCategory, Lo
         ProductCategory existing = productCategoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ProductCategory not found with ID: " + id));
 
-        // Cập nhật các trường cần thiết, ví dụ product và category
-        existing.setProduct(updatedProductCategory.getProduct());
-        existing.setCategory(updatedProductCategory.getCategory());
+        if (updatedProductCategory.getProduct() != null) {
+            existing.setProduct(updatedProductCategory.getProduct());
+        }
+        if (updatedProductCategory.getCategory() != null) {
+            existing.setCategory(updatedProductCategory.getCategory());
+        }
 
         return productCategoryRepository.save(existing);
     }

@@ -20,16 +20,16 @@ public class CategoryServiceImpl extends AServiceImpl<Category, Long> implements
         Category existing = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with ID: " + id));
 
-        existing.setName(updatedCategory.getName());
-        existing.setDescription(updatedCategory.getDescription());
-
-        // Nếu cần cập nhật productCategories thì xử lý thêm ở đây
-        // Thường thì productCategories được quản lý riêng nên không update trực tiếp ở đây
+        if (updatedCategory.getName() != null) {
+            existing.setName(updatedCategory.getName());
+        }
+        if (updatedCategory.getDescription() != null) {
+            existing.setDescription(updatedCategory.getDescription());
+        }
 
         return categoryRepository.save(existing);
     }
 
-    // Bạn có thể thêm các phương thức đặc thù nếu cần, ví dụ tìm category theo tên
     public Optional<Category> findByName(String name) {
         return categoryRepository.findByName(name);
     }
