@@ -21,7 +21,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/categories/**").permitAll()
-                        .requestMatchers("/api/products/**").permitAll()// Cho phép truy cập công khai đến /api/categories
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/product-categories/**").permitAll()
+                        .requestMatchers("/api/carts/**").permitAll()
+                        .requestMatchers("/api/cart-items/**").permitAll()
+                        .requestMatchers("/api/users").permitAll()
                         .anyRequest().authenticated() // Các endpoint khác yêu cầu đăng nhập
                 )
                 .formLogin(form -> form

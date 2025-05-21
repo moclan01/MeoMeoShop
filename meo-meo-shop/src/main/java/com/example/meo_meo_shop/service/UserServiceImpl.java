@@ -3,9 +3,11 @@ package com.example.meo_meo_shop.service;
 import com.example.meo_meo_shop.entity.User;
 import com.example.meo_meo_shop.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl extends AServiceImpl<User, String> implements IService<User, String> {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
