@@ -1,0 +1,88 @@
+.product-detail-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 30px; /* Space between image and info */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.product-detail-image {
+  flex: 1 1 400px; /* Flex basis for image container */
+}
+
+.product-detail-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-detail-info {
+  flex: 1 1 400px; /* Flex basis for info container */
+}
+
+.product-detail-info h2 {
+  font-size: 2em;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.product-detail-info .price {
+  font-size: 1.5em;
+  color: #ff69b4; /* Price color */
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.product-detail-info .category,
+.product-detail-info .brand {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.product-detail-info .description {
+  margin-top: 20px;
+}
+
+.product-detail-info .description h3,
+.product-detail-info .reviews h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.add-to-cart-button {
+  background-color: #ffcc00; /* Button color */
+  color: #333;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+  background-color: #f0b800; /* Darker yellow on hover */
+}
+
+.product-detail-info .reviews {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .product-detail-container {
+    flex-direction: column; /* Stack image and info vertically */
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  .product-detail-image,
+  .product-detail-info {
+    flex: none; /* Remove flex basis */
+    width: 100%; /* Make them take full width */
+  }
+} 

@@ -17,7 +17,7 @@
   display: block; /* Remove extra space below the image */
   width: 100%; /* Make the image fill the container width */
   height: auto; /* Maintain aspect ratio */
-  max-height: 450px; /* Limit the maximum height of the banner */
+  max-height: 400px; /* Limit the maximum height of the banner */
   /* Remove object-fit: cover; */
   /* Remove position: absolute; */
   /* Remove top, left, z-index */
@@ -56,20 +56,113 @@
   border-bottom: none;
 }
 
-.featured-products {
-  flex-grow: 1;
+.products-section {
+   flex-grow: 1;
 }
 
-.featured-products h3 {
+.products-section h2 {
    border-bottom: 2px solid #ffcc00; /* Underline like in the image */
   padding-bottom: 10px;
   margin-bottom: 15px;
 }
 
-.product-list {
+.filter-sort-area {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px; /* Space between filter/sort controls */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  padding: 10px; /* Add padding around the filter area */
+  border: 1px solid #eee; /* Optional: Add a border for clarity */
+  border-radius: 8px; /* Optional: Rounded corners */
+}
+
+.filter-sort-area select,
+.filter-sort-area input[type="number"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.filter-sort-area input[type="text"] {
+  padding: 8px; /* Match padding of other inputs */
+  border: 1px solid #ccc; /* Match border of other inputs */
+  border-radius: 4px; /* Match border-radius of other inputs */
+  font-size: 1em; /* Match font-size of other inputs */
+  flex-grow: 1; /* Allow search input to take available space */
+}
+
+.product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsive grid */
+  gap: 20px; /* Space between product items */
+}
+
+.product-item {
+  border: 1px solid #eee;
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.product-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-item img {
+  max-width: 100%;
+  height: 180px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.product-item h3 {
+  font-size: 1.1em;
+  margin: 10px 0 5px 0;
+  color: #333;
+  min-height: 48px; /* Đảm bảo đủ chỗ cho 2 dòng */
+  line-height: 1.2em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Giới hạn 2 dòng */
+  -webkit-box-orient: vertical;
+}
+
+.product-item p {
+  font-size: 1em;
+  color: #ff69b4;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.product-item-link {
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit color from parent */
+}
+
+.product-item button {
+  background-color: #ffcc00;
+  color: #333;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+  margin-top: auto; /* Đẩy nút xuống cuối */
+}
+
+.product-item button:hover {
+  background-color: #f0b800;
 }
 
 @media (max-width: 768px) {
@@ -92,9 +185,9 @@
     padding: 20px 10px; /* Adjust banner padding */
   }
 
-   .product-list {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Smaller grid items on mobile */
-    gap: 10px; /* Adjust grid gap */
+   .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust grid for smaller screens */
+    gap: 15px;
   }
 
    .header-container {
@@ -114,4 +207,15 @@
       font-size: 1.3em; /* Slightly smaller icons on mobile */
       gap: 10px; /* Adjust icon gap */
     }
+
+  .filter-sort-area {
+    flex-direction: column; /* Stack filter/sort controls vertically on mobile */
+    align-items: stretch; /* Stretch items to full width */
+  }
+
+  .filter-sort-area select,
+  .filter-sort-area input[type="number"] {
+    width: 100%; /* Make filter/sort full width on mobile */
+    box-sizing: border-box; /* Include padding and border in the element's total width */
+  }
 } 

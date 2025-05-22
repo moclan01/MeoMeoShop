@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 import MeoMeoLogo from '../assets/logo.png';
 
 function Header() {
@@ -21,11 +21,17 @@ function Header() {
         </nav>
       </div>
       <div className="header-right">
-        {/* Search Bar */}
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." className="search-input" />
+        {/* Removed Search Bar */}
+        {/* <div className="search-bar">
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            value={searchTerm}
+            onChange={onSearchChange}
+            className="search-input" 
+          />
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
-        </div>
+        </div> */}
         <span className="header-icon"><FontAwesomeIcon icon={faShoppingCart} /><sup>0</sup></span>
         {/* User Account Icon */}
         <span className="header-icon"><FontAwesomeIcon icon={faUser} /></span>
