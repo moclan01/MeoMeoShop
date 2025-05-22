@@ -1,0 +1,94 @@
+.header-container {
+  background-color: #f58495; /* A nice light pink color */
+  padding: 8px 20px; /* Adjusted padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Ensure vertical alignment */
+  position: fixed; /* Make the header fixed at the top */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure header is above other content */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo img {
+  height: 50px; /* Reduced logo size */
+  margin-right: 30px; /* Keep increased space after logo */
+}
+
+.header-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 25px; /* Increased space between menu items */
+}
+
+.header-nav li a {
+  text-decoration: none;
+  color: #ffffff; /* Adjust color if needed */
+  font-weight: bold;
+  font-size: 1.1em; /* Slightly larger font */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.header-nav li a:hover {
+  color: #3e3d3e; /* Highlight color on hover (hot pink) */
+}
+
+.header-right {
+  display: flex;
+  align-items: center; /* Ensure vertical alignment */
+  gap: 20px; /* Increased space between elements in header-right */
+}
+
+.header-icon {
+  font-size: 1.3em; /* Larger icons */
+  cursor: pointer;
+  color: #f8f1f1; /* Icon color */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+  position: relative; /* Needed for positioning the badge */
+}
+
+.header-icon:hover {
+  color: #4b4548; /* Highlight color on hover */
+}
+
+.header-icon sup {
+  position: absolute;
+  top: -5px; /* Adjust vertical position */
+  right: -5px; /* Adjust horizontal position */
+  background-color: rgb(240, 137, 221); /* Badge background color */
+  color: white; /* Badge text color */
+  border-radius: 50%; /* Make it round */
+  padding: 2px 5px; /* Adjust padding */
+  font-size: 0.7em; /* Smaller font size */
+  font-weight: bold;
+  line-height: 1; /* Adjust line height */
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fefefe; /* Light pink background to match header */
+  border-radius: 20px; /* Rounded corners */
+  padding: 5px 15px; /* Adjust padding */
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  margin-right: 10px; /* Space between input and icon */
+  font-size: 1em; /* Adjust font size */
+}
+
+.search-icon {
+  color: #555; /* Icon color */
+} 

@@ -1,0 +1,117 @@
+.homepage-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.homepage-banner {/* Approximate color from the image */
+  color: white;
+  text-align: center;
+  padding: 0; /* Remove padding to let the image take full space */
+  margin-bottom: 20px;
+  position: relative; /* Keep relative position for potential future absolute elements */
+  overflow: hidden;
+}
+
+.banner-image {
+  display: block; /* Remove extra space below the image */
+  width: 100%; /* Make the image fill the container width */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 450px; /* Limit the maximum height of the banner */
+  /* Remove object-fit: cover; */
+  /* Remove position: absolute; */
+  /* Remove top, left, z-index */
+}
+
+.homepage-content {
+  display: flex;
+  gap: 20px;
+}
+
+.product-categories {
+  flex: 0 0 250px; /* Fixed width for category sidebar */
+  border: 1px solid #eee;
+  padding: 15px;
+}
+
+.product-categories h3 {
+  border-bottom: 2px solid #ffcc00; /* Underline like in the image */
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.product-categories ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-categories li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.product-categories li:last-child {
+  border-bottom: none;
+}
+
+.featured-products {
+  flex-grow: 1;
+}
+
+.featured-products h3 {
+   border-bottom: 2px solid #ffcc00; /* Underline like in the image */
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .homepage-content {
+    flex-direction: column; /* Stack categories and featured products vertically */
+    gap: 15px; /* Adjust gap for mobile */
+  }
+
+  .product-categories {
+    flex: none; /* Remove fixed width */
+    width: 100%; /* Make categories take full width */
+    margin-bottom: 15px; /* Add space below categories when stacked */
+  }
+
+  .homepage-container {
+    padding: 10px; /* Reduce overall padding on smaller screens */
+  }
+
+  .homepage-banner {
+    padding: 20px 10px; /* Adjust banner padding */
+  }
+
+   .product-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Smaller grid items on mobile */
+    gap: 10px; /* Adjust grid gap */
+  }
+
+   .header-container {
+     padding: 8px 15px; /* Adjust header padding */
+   }
+
+   .header-nav ul {
+     gap: 15px; /* Adjust menu item gap */
+   }
+
+   .header-logo img {
+     height: 60px; /* Slightly reduce logo size on mobile */
+     margin-right: 15px; /* Adjust space after logo */
+   }
+
+    .header-icon {
+      font-size: 1.3em; /* Slightly smaller icons on mobile */
+      gap: 10px; /* Adjust icon gap */
+    }
+} 
