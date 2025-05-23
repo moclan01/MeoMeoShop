@@ -1,11 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../styles/Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 import MeoMeoLogo from '../../assets/logo.png';
 
 function Header({ cartItems }) {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin');
+
+  // If we're on an admin page, don't render the header
+  if (isAdminPage) {
+    return null;
+  }
+
   // Calculate the total number of unique items in the cart
   const totalItems = cartItems ? cartItems.length : 0;
 
@@ -39,7 +47,7 @@ function Header({ cartItems }) {
         </div> */}
         <Link to="/cart" className="header-icon"><FontAwesomeIcon icon={faShoppingCart} /><sup>{totalItems}</sup></Link>
         {/* User Account Icon */}
-        <Link to="/account" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
+        <Link to="/login" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
       </div>
     </header>
   );

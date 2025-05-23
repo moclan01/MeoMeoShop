@@ -58,14 +58,17 @@ function HomePage({ cartItems, setCartItems }) {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1); // Reset page on search
   };
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
+    setCurrentPage(1); // Reset page on category change
   };
 
   const handleSortChange = (event) => {
     setSortBy(event.target.value);
+    setCurrentPage(1); // Reset page on sort change
   };
 
   // Hàm xử lý chuyển trang
@@ -119,7 +122,13 @@ function HomePage({ cartItems, setCartItems }) {
           {/* Optionally link these categories to filter the product list */}
           <ul>
             {categories.map(category => (
-              <li key={category} onClick={() => setSelectedCategory(category)}>{category}</li>
+              <li 
+                key={category} 
+                onClick={() => handleCategoryChange({ target: { value: category } })}
+                className={selectedCategory === category ? 'active' : ''}
+              >
+                {category}
+              </li>
             ))}
           </ul>
         </aside>

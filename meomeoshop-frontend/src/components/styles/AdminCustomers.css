@@ -1,0 +1,8 @@
+.admin-customers-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Styles for customer list table (inherits from admin-table in Admin.css) */
+
+/* Optional: Styles for individual customer details if needed */ 

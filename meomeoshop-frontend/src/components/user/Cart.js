@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Cart.css';
 
 function Cart({ cartItems, setCartItems }) {
+  const navigate = useNavigate();
+
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return;
     setCartItems(prevItems =>
@@ -18,6 +20,10 @@ function Cart({ cartItems, setCartItems }) {
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleCheckoutClick = () => {
+    navigate('/checkout');
+  };
 
   return (
     <div className="cart-page">
@@ -66,7 +72,7 @@ function Cart({ cartItems, setCartItems }) {
                 <span>Tổng tiền:</span>
                 <span>{totalPrice.toLocaleString('vi-VN')}đ</span>
               </div>
-              <button className="checkout-button">Thanh toán</button>
+              <button className="checkout-button" onClick={handleCheckoutClick}>Thanh toán</button>
             </div>
           </div>
         )}

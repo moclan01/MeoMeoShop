@@ -1,0 +1,57 @@
+.admin-orders-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Styles for order list table (inherits from admin-table in Admin.css) */
+
+.order-status-select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Styles for individual order details (if shown on a separate page/modal) */
+.order-detail {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+}
+
+.order-detail h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.3em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.order-detail p {
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1em;
+}
+
+.order-detail .order-items-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.order-detail .order-items-list li {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.order-detail .order-total {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #ff4d6d;
+} 

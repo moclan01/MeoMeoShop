@@ -1,0 +1,68 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.order-info p {
+  margin: 5px 0;
+}
+
+.order-items {
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+
+.order-items th,
+.order-items td {
+  border: 1px solid #eee;
+  padding: 10px;
+  text-align: center;
+}
+
+.order-items th {
+  background-color: #f9f9f9;
+}
+
+.order-summary {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.order-summary p {
+  margin: 5px 0;
+}
+
+.order-summary .total {
+  font-size: 1.2em;
+  color: #e91e63;
+  font-weight: bold;
+}

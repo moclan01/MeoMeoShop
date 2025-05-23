@@ -23,6 +23,10 @@ main {
   padding-top: 70px; /* Add padding to prevent content from being hidden by the fixed header */
 }
 
+main.admin-main {
+  padding-top: 0; /* Remove top padding for admin pages */
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

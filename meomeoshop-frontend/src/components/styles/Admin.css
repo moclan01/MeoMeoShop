@@ -1,0 +1,113 @@
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+}
+
+.admin-sidebar {
+  width: 250px;
+  background-color: #2c3e50; /* Dark background */
+  color: white;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.admin-sidebar h3 {
+  color: #ecf0f1; /* Light grey */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar nav li {
+  margin-bottom: 10px;
+}
+
+.admin-sidebar nav a {
+  color: #ecf0f1; /* Light grey */
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-sidebar nav a:hover {
+  background-color: #34495e; /* Slightly lighter dark */
+}
+
+.admin-sidebar nav a.active {
+    background-color: #1abc9c; /* Teal color for active */
+    font-weight: bold;
+}
+
+.admin-main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.admin-main-content h1 {
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #bdc3c7; /* Light border */
+    padding-bottom: 10px;
+}
+
+/* Basic table styles for admin sections */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden; /* Needed for border-radius on table */
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-table th {
+    background-color: #ecf0f1; /* Light header background */
+    font-weight: bold;
+    color: #555;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.admin-table td button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-table td button.edit {
+    background-color: #f39c12; /* Orange */
+    color: white;
+}
+
+.admin-table td button.edit:hover {
+    background-color: #e67e22;
+}
+
+.admin-table td button.delete {
+    background-color: #e74c3c; /* Red */
+    color: white;
+}
+
+.admin-table td button.delete:hover {
+    background-color: #c0392b;
+} 
