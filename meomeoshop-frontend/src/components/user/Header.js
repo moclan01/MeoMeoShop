@@ -1,22 +1,27 @@
 import React from 'react';
-import './Header.css';
+import { Link } from 'react-router-dom';
+import '../styles/Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
-import MeoMeoLogo from '../assets/logo.png';
+import MeoMeoLogo from '../../assets/logo.png';
 
-function Header() {
+function Header({ cartItems }) {
+  // Calculate the total number of unique items in the cart
+  const totalItems = cartItems ? cartItems.length : 0;
+
   return (
     <header className="header-container">
       <div className="header-left">
         <div className="header-logo">
-          {/* Placeholder for logo */}
-          <img src={MeoMeoLogo} alt="Meo Meo Shop Logo" />
+          <Link to="/">
+            <img src={MeoMeoLogo} alt="Meo Meo Shop Logo" />
+          </Link>
         </div>
         <nav className="header-nav">
           <ul>
-            <li><a href="#">Trang chủ</a></li>
-            <li><a href="#">Sản phẩm</a></li>
-            <li><a href="#">Liên hệ</a></li>
+            <li><Link to="/">Trang chủ</Link></li>
+            <li><Link to="/products">Sản phẩm</Link></li>
+            <li><Link to="/contact">Liên hệ</Link></li>
           </ul>
         </nav>
       </div>
@@ -32,9 +37,9 @@ function Header() {
           />
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
         </div> */}
-        <span className="header-icon"><FontAwesomeIcon icon={faShoppingCart} /><sup>0</sup></span>
+        <Link to="/cart" className="header-icon"><FontAwesomeIcon icon={faShoppingCart} /><sup>{totalItems}</sup></Link>
         {/* User Account Icon */}
-        <span className="header-icon"><FontAwesomeIcon icon={faUser} /></span>
+        <Link to="/account" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
       </div>
     </header>
   );

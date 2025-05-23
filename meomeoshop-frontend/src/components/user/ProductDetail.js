@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; // To get route parameters
-import './ProductDetail.css';
-import ProductImage from '../assets/product.png'; // Import the common product image
+import '../styles/ProductDetail.css';
+import ProductImage from '../../assets/product.png'; // Import the common product image
 
-function ProductDetail() {
+function ProductDetail({ cartItems, setCartItems }) {
   const { productId } = useParams(); // Get product ID from URL
   const [product, setProduct] = useState(null); // State to store product details
   const [loading, setLoading] = useState(true); // State for loading indicator
@@ -36,6 +36,24 @@ function ProductDetail() {
 
   }, [productId]); // Re-run effect when productId changes
 
+  // Hàm xử lý thêm sản phẩm vào giỏ hàng
+  const handleAddToCart = (productToAdd) => {
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === productToAdd.id);
+      if (existingItem) {
+        // Nếu sản phẩm đã có trong giỏ, tăng số lượng
+        return prevItems.map(item =>
+          item.id === productToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        // Nếu sản phẩm chưa có, thêm mới với số lượng là 1
+        // Chuyển đổi giá về dạng số để tính toán và thêm thuộc tính 'image'
+        const numericPrice = parseFloat(productToAdd.price.replace('.', '').replace('vnđ', ''));
+        return [...prevItems, { ...productToAdd, quantity: 1, price: numericPrice, image: 'product.png' }]; // Add image field and numeric price
+      }
+    });
+  };
+
   if (loading) {
     return <div className="product-detail-container">Đang tải...</div>;
   }
@@ -63,7 +81,7 @@ function ProductDetail() {
           <p>{product.description}</p>
         </div>
         {/* Add to cart button */}
-        <button className="add-to-cart-button">Thêm vào giỏ</button>
+        <button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>Thêm vào giỏ</button>
         {/* Placeholder for reviews/ratings */}
         <div className="reviews">
           <h3>Đánh giá:</h3>

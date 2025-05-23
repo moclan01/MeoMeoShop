@@ -54,7 +54,7 @@
 }
 
 .add-to-cart-button {
-  background-color: #ffcc00; /* Button color */
+  background-color: #ff4d6d; /* Button color */
   color: #333;
   border: none;
   padding: 12px 20px;
@@ -66,7 +66,7 @@
 }
 
 .add-to-cart-button:hover {
-  background-color: #f0b800; /* Darker yellow on hover */
+  background-color: #a30930; /* Darker yellow on hover */
 }
 
 .product-detail-info .reviews {
