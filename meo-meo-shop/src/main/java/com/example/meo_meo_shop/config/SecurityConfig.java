@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/product-categories/**").permitAll()
                         .requestMatchers("/api/carts/**").permitAll()
                         .requestMatchers("/api/cart-items/**").permitAll()
-                        .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
                         .anyRequest().authenticated() // Các endpoint khác yêu cầu đăng nhập
                 )
                 .formLogin(form -> form

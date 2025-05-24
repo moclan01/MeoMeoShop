@@ -1,5 +1,6 @@
 package com.example.meo_meo_shop.controller.API;
 
+import com.example.meo_meo_shop.dto.UserRegistrationDTO;
 import com.example.meo_meo_shop.entity.User;
 import com.example.meo_meo_shop.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -38,21 +39,28 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        // Kiểm tra dữ liệu đầu vào
-        if (user == null || user.getEmail() == null || user.getEmail().trim().isEmpty() ||
-                user.getPassword() == null || user.getPassword().trim().isEmpty() ||
-                user.getName() == null || user.getName().trim().isEmpty()) {
+    public ResponseEntity<User> createUser(@RequestBody UserRegistrationDTO registrationDTO) {
+        // Kiểm tra dữ liệu đầu vào từ DTO
+        if (registrationDTO == null || registrationDTO.getEmail() == null || registrationDTO.getEmail().trim().isEmpty() ||
+                registrationDTO.getPassword() == null || registrationDTO.getPassword().trim().isEmpty() ||
+                registrationDTO.getName() == null || registrationDTO.getName().trim().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         // Kiểm tra email đã tồn tại
-        if (userService.existsByEmail(user.getEmail())) {
+        if (userService.existsByEmail(registrationDTO.getEmail())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        // Mã hóa mật khẩu trước khi lưu
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Tạo entity User từ DTO và gán vai trò mặc định
+        User user = new User();
+        user.setName(registrationDTO.getName());
+        user.setEmail(registrationDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(registrationDTO.getPassword())); // Mã hóa mật khẩu
+        user.setPhone(registrationDTO.getPhone());
+        user.setAddress(registrationDTO.getAddress());
+        user.setRole("USER"); // Gán vai trò mặc định
+
         User createdUser = userService.create(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }

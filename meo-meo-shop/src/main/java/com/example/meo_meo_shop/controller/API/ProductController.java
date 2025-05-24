@@ -1,5 +1,6 @@
 package com.example.meo_meo_shop.controller.API;
 
+import com.example.meo_meo_shop.dto.ProductDTO;
 import com.example.meo_meo_shop.entity.Product;
 import com.example.meo_meo_shop.service.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,31 +21,34 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         List<Product> products = productService.getAll();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        List<ProductDTO> dtos = products.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         Optional<Product> product = productService.getById(id);
-        return product.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+        return product.map(value -> new ResponseEntity<>(convertToDTO(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product) {
         // Kiểm tra dữ liệu đầu vào cơ bản
         if (product == null || product.getName() == null || product.getName().trim().isEmpty() ||
                 product.getPrice() < 0 || product.getStock() < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Product createdProduct = productService.create(product);
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+        return new ResponseEntity<>(convertToDTO(createdProduct), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
         // Kiểm tra dữ liệu đầu vào cơ bản
         if (updatedProduct == null || (updatedProduct.getName() != null && updatedProduct.getName().trim().isEmpty()) ||
                 (updatedProduct.getPrice() < 0) ||
@@ -52,12 +57,11 @@ public class ProductController {
         }
         try {
             Product updated = productService.update(id, updatedProduct);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            return new ResponseEntity<>(convertToDTO(updated), HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
@@ -71,11 +75,40 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> findProductsByName(@RequestParam String keyword) {
+    public ResponseEntity<List<ProductDTO>> findProductsByName(@RequestParam String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<Product> products = productService.findByNameContaining(keyword);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        List<ProductDTO> dtos = products.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
+    private ProductDTO convertToDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+        dto.setProductId(product.getProductId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        dto.setStock(product.getStock());
+        dto.setImageUrl(product.getImageUrl());
+
+        // Convert categories
+        if (product.getProductCategories() != null) {
+            List<ProductDTO.CategoryDTO> categoryDTOs = product.getProductCategories().stream()
+                    .map(pc -> {
+                        ProductDTO.CategoryDTO categoryDTO = new ProductDTO.CategoryDTO();
+                        categoryDTO.setCategoryId(pc.getCategory().getCategoryId());
+                        categoryDTO.setName(pc.getCategory().getName());
+                        categoryDTO.setDescription(pc.getCategory().getDescription());
+                        return categoryDTO;
+                    })
+                    .collect(Collectors.toList());
+            dto.setCategories(categoryDTOs);
+        }
+
+        return dto;
     }
 }
