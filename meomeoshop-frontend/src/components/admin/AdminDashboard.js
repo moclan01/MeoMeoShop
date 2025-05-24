@@ -1,8 +1,17 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import '../styles/Admin.css';
 
-function AdminDashboard() {
+function AdminDashboard({ onLogout }) {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    if (onLogout) {
+      onLogout();
+    }
+    navigate('/');
+  };
+
   return (
     <div className="admin-dashboard">
       <aside className="admin-sidebar">
@@ -23,7 +32,7 @@ function AdminDashboard() {
             </li>
             {/* Add more admin navigation links here */}
             <li>
-                <Link to="/">Thoát Admin</Link>
+                <button className="admin-logout-button" onClick={handleLogoutClick}>Đăng xuất</button>
             </li>
           </ul>
         </nav>

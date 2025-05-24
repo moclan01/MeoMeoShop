@@ -1,0 +1,112 @@
+.admin-dashboard-content {
+  padding: 20px;
+  background-color: #f8f9fa; /* Light background */
+}
+
+.admin-dashboard-content h3 {
+  margin-top: 0;
+  margin-bottom: 30px;
+  color: #343a40; /* Darker heading */
+  text-align: center;
+}
+
+.stats-widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.widget {
+  background-color: #ffffff; /* White background for widgets */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.widget h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #007bff; /* Primary color for widget titles */
+  font-size: 1.1em;
+}
+
+.widget .value {
+  font-size: 2em;
+  font-weight: bold;
+  color: #343a40; /* Darker color for values */
+  margin-bottom: 5px;
+}
+
+.widget .description {
+  font-size: 0.9em;
+  color: #6c757d; /* Muted color for descriptions */
+}
+
+.chart-placeholder {
+  margin-bottom: 40px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-placeholder h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #343a40;
+}
+
+.chart-placeholder div {
+  /* Styles from JS, keeping for visual */
+  width: 100%;
+  height: 250px; /* Increased height */
+  background-color: #e9ecef; /* Lighter placeholder color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: #6c757d;
+  font-size: 1.1em;
+}
+
+.recent-data {
+  margin-bottom: 40px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recent-data h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #343a40;
+}
+
+.recent-data table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.recent-data th, .recent-data td {
+  border: 1px solid #dee2e6; /* Lighter border */
+  padding: 12px;
+  text-align: left;
+}
+
+.recent-data th {
+  background-color: #007bff; /* Primary color for table header */
+  color: white;
+  font-weight: bold;
+}
+
+.recent-data tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Zebra striping */
+}
+
+.recent-data tbody tr:hover {
+  background-color: #e9ecef; /* Hover effect */
+} 

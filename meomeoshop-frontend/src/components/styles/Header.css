@@ -92,3 +92,8 @@
 .search-icon {
   color: #555; /* Icon color */
 } 
+.header-icon.user-loggedIn {
+  color: #4a5a4e; /* Ví dụ: đổi màu xanh lá */
+  font-weight: bold; /* Ví dụ: in đậm */
+  /* Các style khác bạn muốn thêm để phân biệt */
+} 

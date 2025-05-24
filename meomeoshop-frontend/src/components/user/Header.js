@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 import MeoMeoLogo from '../../assets/logo.png';
 
-function Header({ cartItems }) {
+function Header({ cartItems, loggedInUser }) {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
 
@@ -46,8 +46,19 @@ function Header({ cartItems }) {
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
         </div> */}
         <Link to="/cart" className="header-icon"><FontAwesomeIcon icon={faShoppingCart} /><sup>{totalItems}</sup></Link>
-        {/* User Account Icon */}
-        <Link to="/login" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
+
+        {/* User Account Icon - Conditional rendering based on login status */}
+        {loggedInUser ? (
+          // Nếu người dùng đã đăng nhập, hiển thị tên hoặc biểu tượng khác
+          <Link to="/profile" className="header-icon user-loggedIn">
+            {/* Có thể thay thế bằng tên người dùng: {loggedInUser.name} */}
+            <FontAwesomeIcon icon={faUser} /> 
+            {/* Tùy chọn: thêm dropdown menu cho profile, logout, etc. */}
+          </Link>
+        ) : (
+          // Nếu chưa đăng nhập, hiển thị liên kết Login
+          <Link to="/login" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
+        )}
       </div>
     </header>
   );
