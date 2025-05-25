@@ -22,29 +22,48 @@ import AdminDashboardContent from './components/admin/AdminDashboardContent';
 import PrivateRoute from './components/auth/PrivateRoute';
 // Import MainContent
 import MainContent from './components/layout/MainContent';
+import Order from './components/user/Order';
+import OrderSuccess from './components/user/OrderSuccess';
+import Orders from './components/user/Orders';
 
 function App() {
-  // State for cart items, initialized from localStorage
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCartItems = localStorage.getItem('cartItems');
-    return savedCartItems ? JSON.parse(savedCartItems) : [];
-  });
-
   // State for logged-in user, initialized from localStorage
   const [loggedInUser, setLoggedInUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // Effect to save cart items to localStorage whenever cartItems state changes
-  useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]); // Dependency array ensures effect runs only when cartItems changes
-
   // Function to handle user login
-  const handleLogin = (userData) => {
+  const handleLogin = async (userData) => {
+    // Save initial user data from login response
     setLoggedInUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+
+    // If cart information is missing from login response, try fetching the cart
+    if (!userData.cart || !userData.cart.cartId) {
+      console.log('Cart info missing in login response, attempting to fetch cart...');
+      const userId = userData.userId;
+      if (userId) {
+        try {
+          // Use the /by-user endpoint we added
+          const cartResponse = await fetch(`http://localhost:8080/api/carts/by-user/${userId}`, {
+            // Thêm tùy chọn này để gửi cookies (session cookie)
+            credentials: 'include'
+          });
+          if (cartResponse.ok) {
+            const cartData = await cartResponse.json();
+            console.log('Fetched cart after login:', cartData);
+            const updatedUserData = { ...userData, cart: cartData };
+            setLoggedInUser(updatedUserData);
+            localStorage.setItem('user', JSON.stringify(updatedUserData));
+          } else {
+            console.error('Failed to fetch cart after login:', cartResponse.status);
+          }
+        } catch (error) {
+          console.error('Error fetching cart after login:', error);
+        }
+      }
+    }
   };
 
   // Function to handle user logout
@@ -56,20 +75,34 @@ function App() {
     // Chúng ta cần xử lý điều hướng này ở component gọi handleLogout (ví dụ: Profile, AdminDashboard)
   };
 
+  // Function to update cart data within the loggedInUser state
+  const updateCartInUserState = (cartData) => {
+    if (loggedInUser) {
+      const updatedUserData = { ...loggedInUser, cart: cartData };
+      setLoggedInUser(updatedUserData);
+      localStorage.setItem('user', JSON.stringify(updatedUserData));
+      console.log('User state updated with new cart:', updatedUserData);
+    }
+  };
+
   return (
     <Router>
       <div className="App">
-        <Header cartItems={cartItems} loggedInUser={loggedInUser} />
+        <Header loggedInUser={loggedInUser} cartItems={loggedInUser?.cart?.items} />
         <MainContent>
           <Routes>
             {/* User Routes */}
-            <Route path="/" element={<HomePage cartItems={cartItems} setCartItems={setCartItems} />} />
-            <Route path="/products/:productId" element={<ProductDetail cartItems={cartItems} setCartItems={setCartItems} />} />
-            <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
+            <Route path="/" element={<HomePage loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
+            <Route path="/products/:productId" element={<ProductDetail loggedInUser={loggedInUser} />} />
+            <Route path="/cart" element={<Cart loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
             <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/checkout" element={<Checkout cartItems={cartItems} setCartItems={setCartItems} />} />
-            {/* Profile Route - Truyền handleLogout xuống Profile */}
+            <Route 
+              path="/checkout" 
+              element={<Order loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}
+            />
+            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/orders" element={<Orders loggedInUser={loggedInUser} />} />
             <Route path="/profile" element={<Profile onLogout={handleLogout} />} />
 
             {/* Admin Routes - Protected by PrivateRoute */}
@@ -77,15 +110,12 @@ function App() {
               path="/admin"
               element={
                 <PrivateRoute>
-                  {/* Truyền handleLogout xuống AdminDashboard */}
                   <AdminDashboard onLogout={handleLogout} />
                 </PrivateRoute>
               }
             >
-              {/* Routes con render nội dung cụ thể */}
-              <Route index element={<AdminDashboardContent />} /> {/* Render dashboard content at /admin */}
-              <Route path="dashboard" element={<AdminDashboardContent />} /> {/* Render dashboard content at /admin/dashboard */}
-
+              <Route index element={<AdminDashboardContent />} />
+              <Route path="dashboard" element={<AdminDashboardContent />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />

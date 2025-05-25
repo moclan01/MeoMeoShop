@@ -28,7 +28,6 @@ function Header({ cartItems, loggedInUser }) {
         <nav className="header-nav">
           <ul>
             <li><Link to="/">Trang chủ</Link></li>
-            <li><Link to="/products">Sản phẩm</Link></li>
             <li><Link to="/contact">Liên hệ</Link></li>
           </ul>
         </nav>

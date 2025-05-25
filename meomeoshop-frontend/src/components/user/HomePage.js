@@ -1,34 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HomePage.css'; // We will create this CSS file later
 import BannerImage from '../../assets/banner.png'; // Import your banner image
-import ProductImage from '../../assets/product.png'; // Import the common product image
+// ProductImage is no longer strictly needed if using dynamic image URLs from API
+// import ProductImage from '../../assets/product.png'; // Import the common product image
 
-function HomePage({ cartItems, setCartItems }) {
-  // Mock data for products, including category and brand
-  const products = [
-    { id: 1, name: 'Thức Ăn Hạt Pedigree Dành Cho Chó Trưởng Thành - Vị Bò Nướng', price: 45000, priceDisplay: '45.000vnđ', imageUrl: ProductImage, category: 'Thức ăn hạt', brand: 'Pedigree' },
-    { id: 2, name: 'Thức Ăn Hạt Me-o Kitten Ocean Fish - 400g', price: 50000, priceDisplay: '50.000vnđ', imageUrl: ProductImage, category: 'Thức ăn hạt', brand: 'Me-o' },
-    { id: 3, name: 'Thức Ăn Hạt Pedigree Vị Trứng Sữa - Chó Con', price: 215000, priceDisplay: '215.000vnđ', imageUrl: ProductImage, category: 'Thức ăn hạt', brand: 'Pedigree' },
-    { id: 4, name: 'Bánh Xương Dentastix Pedigree Cho Chó Trung (98g)', price: 40000, priceDisplay: '40.000vnđ', imageUrl: ProductImage, category: 'Bánh thưởng', brand: 'Pedastix' },
-    { id: 5, name: 'Pate Cho Mèo Lớn Whiskas Vị Cá Thu', price: 20000, priceDisplay: '20.000vnđ', imageUrl: ProductImage, category: 'PATE', brand: 'Whiskas' },
-    { id: 6, name: 'Đồ Chơi Chuột Vờn Cho Mèo', price: 30000, priceDisplay: '30.000vnđ', imageUrl: ProductImage, category: 'Đồ chơi', brand: 'PetToy' },
-    // Add more mock products here with category and brand
-    { id: 7, name: 'Sữa Tắm Cho Chó SOS (Màu Xanh) Làm Mượt & Bóng Lông', price: 85000, priceDisplay: '85.000vnđ', imageUrl: ProductImage, category: 'Chăm sóc thú cưng', brand: 'SOS' },
-    { id: 8, name: 'Xương Gặm Sạch Răng Orgo Cho Chó Lớn Vị Bạc Hà', price: 55000, priceDisplay: '55.000vnđ', imageUrl: ProductImage, category: 'Xương gặm', brand: 'Orgo' },
-    { id: 9, name: 'Cát Vệ Sinh Cho Mèo Kitcat Soya Clump (Than Hoạt Tính)', price: 120000, priceDisplay: '120.000vnđ', imageUrl: ProductImage, category: 'Vệ sinh', brand: 'Kitcat' },
-  ];
+function HomePage({ loggedInUser, updateCartInUserState }) {
+  // State for fetched products, loading, and error
+  const [products, setProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true); // Đổi tên state loading
+  const [productError, setProductError] = useState(null); // Đổi tên state error
+
+  // Add state for fetched categories and their loading/error state
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categoryError, setCategoryError] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All'); // State for selected category
-  const [sortBy, setSortBy] = useState('name-asc'); // State for sorting criteria
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortBy, setSortBy] = useState('name-asc');
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6; // Số sản phẩm hiển thị trên mỗi trang
+
+  // Effect to fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/products');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setProducts(data);
+        setLoadingProducts(false); // Cập nhật state loading sản phẩm
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProductError('Không thể tải sản phẩm. Vui lòng thử lại sau.'); // Cập nhật state lỗi sản phẩm
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Effect to fetch all categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/categories');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // API trả về danh sách Category entities, chúng ta chỉ cần tên và id để lọc
+        setCategories(['All', ...data.map(cat => cat.name)]); // Lưu danh sách tên danh mục
+        setLoadingCategories(false);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setCategoryError('Không thể tải danh mục. Vui lòng thử lại sau.');
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []); // Effect này chạy một lần khi component mount
 
   // Filter products based on search term and filter criteria
   let filteredProducts = products.filter(product => {
     const nameMatch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const categoryMatch = selectedCategory === 'All' || product.category === selectedCategory;
+    // Logic lọc sản phẩm vẫn dựa trên danh mục của sản phẩm
+    const categoryMatch = selectedCategory === 'All' || 
+                          (product.categories && product.categories.some(cat => cat.name === selectedCategory));
 
     return nameMatch && categoryMatch;
   });
@@ -36,15 +78,10 @@ function HomePage({ cartItems, setCartItems }) {
   // Sort filtered products
   filteredProducts = filteredProducts.sort((a, b) => {
     switch (sortBy) {
-      case 'name-asc':
-        return a.name.localeCompare(b.name);
-      case 'name-desc':
-        return b.name.localeCompare(a.name);
       case 'price-asc':
         return a.price - b.price;
       case 'price-desc':
         return b.price - a.price;
-      // Add more sorting cases as needed (e.g., by brand)
       default:
         return 0;
     }
@@ -58,17 +95,17 @@ function HomePage({ cartItems, setCartItems }) {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setCurrentPage(1); // Reset page on search
+    setCurrentPage(1);
   };
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-    setCurrentPage(1); // Reset page on category change
+  const handleCategoryChange = (categoryName) => { // Nhận trực tiếp tên danh mục
+    setSelectedCategory(categoryName);
+    setCurrentPage(1);
   };
 
   const handleSortChange = (event) => {
     setSortBy(event.target.value);
-    setCurrentPage(1); // Reset page on sort change
+    setCurrentPage(1);
   };
 
   // Hàm xử lý chuyển trang
@@ -79,30 +116,71 @@ function HomePage({ cartItems, setCartItems }) {
   // Tạo mảng các số trang để hiển thị
   const getPageNumbers = () => {
     const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
+    if (filteredProducts.length > 0) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
     }
     return pageNumbers;
   };
 
-  // Get unique categories for filter dropdown
-  const categories = ['All', ...new Set(products.map(product => product.category))];
+  // Hàm xử lý thêm sản phẩm vào giỏ hàng (gọi API)
+  const handleAddToCart = async (product) => { // Đổi thành async function
+    // Kiểm tra xem người dùng đã đăng nhập và có cartId chưa
+    if (!loggedInUser || !loggedInUser.cart || !loggedInUser.cart.cartId) {
+      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+      return;
+    }
 
-  // Hàm xử lý thêm sản phẩm vào giỏ hàng
-  const handleAddToCart = (product) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
-      if (existingItem) {
-        // Nếu sản phẩm đã có trong giỏ, tăng số lượng
-        return prevItems.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        // Nếu sản phẩm chưa có, thêm mới với số lượng là 1
-        // Thêm thuộc tính 'image' với tên file cố định
-        return [...prevItems, { ...product, quantity: 1, image: 'product.png' }];
+    const cartId = loggedInUser.cart.cartId;
+    const productId = product.productId;
+    const quantity = 1; // Mặc định thêm 1 sản phẩm
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/cart-items?cartId=${cartId}&productId=${productId}&quantity=${quantity}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // API đang sử dụng request params, body có thể trống hoặc null
+          // Có thể cần thêm Authorization header nếu API yêu cầu
+        },
+        // body: JSON.stringify({}) // Body có thể rỗng nếu API chỉ dùng request params
+      });
+
+      if (!response.ok) {
+         // Xử lý các trường hợp lỗi cụ thể từ API (ví dụ: sản phẩm không tồn tại, giỏ hàng không tồn tại)
+        const errorData = await response.json(); // Đọc body lỗi nếu có
+        console.error('Error adding to cart API response:', errorData);
+         let errorMessage = 'Có lỗi xảy ra khi thêm sản phẩm vào giỏ.';
+         if(response.status === 400) errorMessage = 'Yêu cầu không hợp lệ.';
+         if(response.status === 404) errorMessage = 'Sản phẩm hoặc giỏ hàng không tồn tại.';
+         alert(errorMessage + ' Vui lòng thử lại.');
+         return;
       }
-    });
+
+      // Xử lý khi API gọi thành công
+      alert('Sản phẩm đã được thêm vào giỏ hàng!');
+      const cartItemResponse = await response.json(); // Get the response data
+      console.log('Product added to cart successfully:', cartItemResponse);
+
+      // Fetch the updated cart details after adding an item
+      if (loggedInUser?.userId) {
+        try {
+          const cartResponse = await fetch(`http://localhost:8080/api/carts/by-user/${loggedInUser.userId}`);
+          if (cartResponse.ok) {
+            const updatedCartData = await cartResponse.json();
+            updateCartInUserState(updatedCartData); // Update cart state in App.js
+          } else {
+            console.error('Failed to fetch updated cart after adding item:', cartResponse.status);
+          }
+        } catch (error) {
+          console.error('Error fetching updated cart after adding item:', error);
+        }
+      }
+
+    } catch (error) {
+      console.error('Error calling add to cart API:', error);
+      alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+    }
   };
 
   return (
@@ -110,7 +188,6 @@ function HomePage({ cartItems, setCartItems }) {
       {/* Banner/Quảng cáo */}
       <section className="homepage-banner">
         {/* Content for banner */}
-        {/* Removed h2 as text is in banner image */}
         {/* Image or background for banner */}
         <img src={BannerImage} alt="Banner" className="banner-image" />
       </section>
@@ -119,18 +196,23 @@ function HomePage({ cartItems, setCartItems }) {
         {/* Danh mục sản phẩm */}
         <aside className="product-categories">
           <h3>DANH MỤC SẢN PHẨM</h3>
-          {/* Optionally link these categories to filter the product list */}
-          <ul>
-            {categories.map(category => (
-              <li 
-                key={category} 
-                onClick={() => handleCategoryChange({ target: { value: category } })}
-                className={selectedCategory === category ? 'active' : ''}
-              >
-                {category}
-              </li>
-            ))}
-          </ul>
+          {/* Hiển thị danh mục từ state categories đã fetch riêng */}
+          {loadingCategories && <p>Đang tải danh mục...</p>}
+          {categoryError && <p className="error-message">{categoryError}</p>}
+          {!loadingCategories && !categoryError && categories.length > 0 && (
+            <ul>
+              {categories.map(category => (
+                <li 
+                  key={category} // Sử dụng tên danh mục làm key
+                  onClick={() => handleCategoryChange(category)} // Truyền tên danh mục trực tiếp
+                  className={selectedCategory === category ? 'active' : ''}
+                >
+                  {category}
+                </li>
+              ))}
+            </ul>
+          )}
+           {!loadingCategories && !categoryError && categories.length === 0 && <p>Không có danh mục nào.</p>}
         </aside>
 
         {/* Sản phẩm */}
@@ -152,38 +234,39 @@ function HomePage({ cartItems, setCartItems }) {
                 <option value="price-asc">Sắp xếp theo giá ↑</option>
                 <option value="price-desc">Sắp xếp theo giá ↓</option>
              </select>
-
            </div>
 
-          <div className="product-grid">
-             {currentProducts.length === 0 ? (
-               <p>Không tìm thấy sản phẩm nào phù hợp.</p>
-             ) : (
-               currentProducts.map(product => (
-                 <div key={product.id} className="product-item">
-                   {/* Link around image and info */}
-                   <Link to={`/products/${product.id}`} className="product-item-link">
+          {/* Hiển thị trạng thái loading, lỗi hoặc sản phẩm */}
+          {loadingProducts && <p>Đang tải sản phẩm...</p>}
+          {productError && <p className="error-message">{productError}</p>}
+          {!loadingProducts && !productError && currentProducts.length === 0 && <p>Không tìm thấy sản phẩm nào phù hợp.</p>}
+
+          {!loadingProducts && !productError && currentProducts.length > 0 && (
+            <div className="product-grid">
+               {currentProducts.map(product => (
+                 <div key={product.productId} className="product-item">
+                   <Link to={`/products/${product.productId}`} className="product-item-link"> 
                      <img src={product.imageUrl} alt={product.name} />
                      <h3>{product.name}</h3>
-                     <p>{product.priceDisplay}</p>
+                     <p>{product.price ? product.price.toLocaleString('vi-VN') + 'đ' : 'N/A'}</p> 
                    </Link>
                    {/* Add to cart button outside the Link */}
                    <button onClick={() => handleAddToCart(product)}>Thêm vào giỏ</button>
                  </div>
                ))
-             )}
+             }
            </div>
+          )}
 
            {/* Phân trang */}
-           {totalPages > 1 && (
+           {!loadingProducts && !productError && totalPages > 1 && (
              <div className="pagination">
                <button
-                 onClick={() => handlePageChange(currentPage - 1)}
-                 disabled={currentPage === 1}
+                 onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}
                >
                  &laquo;
                </button>
-               
+
                {getPageNumbers().map(number => (
                  <button
                    key={number}
