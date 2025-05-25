@@ -9,6 +9,7 @@ import com.example.meo_meo_shop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,5 +72,9 @@ public class CartItemServiceImpl extends AServiceImpl<CartItem, Long> implements
             cartRepository.save(cart);
             return newItem;
         }
+    }
+
+    public List<CartItem> getCartItemsByCartId(Long cartId) {
+        return cartItemRepository.findByCart_CartIdOrderByCartItemIdAsc(cartId);
     }
 }

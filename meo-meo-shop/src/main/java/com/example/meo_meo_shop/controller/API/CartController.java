@@ -75,6 +75,30 @@ public class CartController {
         }
     }
 
+    @PostMapping("/{cartId}/clear")
+    public ResponseEntity<Void> clearCart(@PathVariable Long cartId) {
+        try {
+            cartService.clearCart(cartId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            System.err.println("Error clearing cart with ID " + cartId + ": " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/by-user/{userId}")
+    public ResponseEntity<CartDTO> getCartByUserId(@PathVariable String userId) {
+        try {
+            Optional<Cart> cart = cartService.getByUserId(userId);
+            return cart.map(value -> new ResponseEntity<>(convertToDTO(value), HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     private CartDTO convertToDTO(Cart cart) {
         CartDTO dto = new CartDTO();
         dto.setCartId(cart.getCartId());
@@ -90,7 +114,10 @@ public class CartController {
 
         // Chuyển đổi CartItems sang CartItemDTOs sử dụng phương thức từ CartItemController
         if (cart.getItems() != null) {
-            List<CartItemDTO> itemDTOs = cart.getItems().stream()
+            List<CartItem> orderedItems = cart.getItems().stream()
+                    .sorted((a, b) -> a.getCartItemId().compareTo(b.getCartItemId()))
+                    .collect(Collectors.toList());
+            List<CartItemDTO> itemDTOs = orderedItems.stream()
                     .map(cartItemController::convertToDTO)
                     .collect(Collectors.toList());
             dto.setItems(itemDTOs);

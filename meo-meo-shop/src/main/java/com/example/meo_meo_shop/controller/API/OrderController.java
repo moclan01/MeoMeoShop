@@ -1,47 +1,96 @@
 package com.example.meo_meo_shop.controller.API;
 
+import com.example.meo_meo_shop.dto.OrderDTO;
+import com.example.meo_meo_shop.dto.OrderItemDTO;
 import com.example.meo_meo_shop.entity.Order;
+import com.example.meo_meo_shop.entity.OrderItem;
+import com.example.meo_meo_shop.entity.User;
+import com.example.meo_meo_shop.entity.Product;
 import com.example.meo_meo_shop.service.OrderServiceImpl;
+import com.example.meo_meo_shop.service.ProductServiceImpl;
+import com.example.meo_meo_shop.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
     private final OrderServiceImpl orderService;
+    private final UserServiceImpl userService;
+    private final ProductServiceImpl productService;
 
-    public OrderController(OrderServiceImpl orderService) {
+    public OrderController(OrderServiceImpl orderService, UserServiceImpl userService, ProductServiceImpl productService) {
         this.orderService = orderService;
+        this.userService = userService;
+        this.productService = productService;
     }
 
-    @RequestMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
         List<Order> orders = orderService.getAll();
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        List<OrderDTO> orderDTOs = orders.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
         Optional<Order> order = orderService.getById(id);
-        return order.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+        return order.map(this::convertToDTO)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.create(order);
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+        try {
+            // Get user
+            User user = userService.getById(orderDTO.getUser().getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Create order
+            Order order = new Order();
+            order.setUser(user);
+            order.setOrderDate(orderDTO.getOrderDate());
+            order.setTotalAmount(orderDTO.getTotalAmount());
+            order.setStatus(orderDTO.getStatus());
+            order.setShippingAddress(orderDTO.getShippingAddress());
+            order.setPhone(orderDTO.getPhone());
+
+            // Create order items
+            java.util.List<OrderItem> orderItems = orderDTO.getOrderItems().stream()
+                    .map(itemDTO -> {
+                        Product product = productService.getById(itemDTO.getProduct().getProductId())
+                                .orElseThrow(() -> new RuntimeException("Product not found"));
+                        
+                        OrderItem orderItem = new OrderItem();
+                        orderItem.setOrder(order);
+                        orderItem.setProduct(product);
+                        orderItem.setQuantity(itemDTO.getQuantity());
+                        orderItem.setPricePerUnit(itemDTO.getPricePerUnit());
+                        return orderItem;
+                    })
+                    .collect(Collectors.toList());
+
+            order.setOrderItems(new java.util.HashSet<>(orderItems));
+            Order createdOrder = orderService.create(order);
+            return new ResponseEntity<>(convertToDTO(createdOrder), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order updatedOrder) {
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody Order updatedOrder) {
         try {
             Order updated = orderService.update(id, updatedOrder);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            return new ResponseEntity<>(convertToDTO(updated), HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -51,5 +100,51 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private OrderDTO convertToDTO(Order order) {
+        OrderDTO dto = new OrderDTO();
+        dto.setOrderId(order.getOrderId());
+
+        if (order.getUser() != null) {
+            OrderDTO.UserSimpleDTO userDTO = new OrderDTO.UserSimpleDTO();
+            userDTO.setUserId(order.getUser().getUserId());
+            userDTO.setName(order.getUser().getName());
+            userDTO.setEmail(order.getUser().getEmail());
+            dto.setUser(userDTO);
+        }
+
+        if (order.getOrderItems() != null) {
+            List<OrderItemDTO> itemDTOs = order.getOrderItems().stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+            dto.setOrderItems(itemDTOs);
+        }
+
+        dto.setOrderDate(order.getOrderDate());
+        dto.setTotalAmount(order.getTotalAmount());
+        dto.setStatus(order.getStatus());
+        dto.setShippingAddress(order.getShippingAddress());
+        dto.setPhone(order.getPhone());
+
+        return dto;
+    }
+
+    private OrderItemDTO convertToDTO(OrderItem orderItem) {
+        OrderItemDTO dto = new OrderItemDTO();
+        dto.setOrderItemId(orderItem.getOrderItemId());
+        dto.setQuantity(orderItem.getQuantity());
+        dto.setPricePerUnit(orderItem.getPricePerUnit());
+
+        if (orderItem.getProduct() != null) {
+            OrderItemDTO.ProductSimpleDTO productDTO = new OrderItemDTO.ProductSimpleDTO();
+            productDTO.setProductId(orderItem.getProduct().getProductId());
+            productDTO.setName(orderItem.getProduct().getName());
+            productDTO.setImageUrl(orderItem.getProduct().getImageUrl());
+            productDTO.setPrice(orderItem.getProduct().getPrice());
+            dto.setProduct(productDTO);
+        }
+
+        return dto;
     }
 }

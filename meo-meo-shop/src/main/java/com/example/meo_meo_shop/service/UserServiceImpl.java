@@ -1,9 +1,12 @@
 package com.example.meo_meo_shop.service;
 
+import com.example.meo_meo_shop.entity.Cart;
 import com.example.meo_meo_shop.entity.User;
+import com.example.meo_meo_shop.repository.CartRepository;
 import com.example.meo_meo_shop.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -11,11 +14,25 @@ import java.util.Optional;
 public class UserServiceImpl extends AServiceImpl<User, String> implements IService<User, String> {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartRepository cartRepository;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository) {
         super(userRepository);
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
+    }
+
+    @Override
+    @Transactional
+    public User create(User user) {
+        User createdUser = userRepository.save(user);
+
+        Cart newCart = new Cart();
+        newCart.setUser(createdUser);
+        cartRepository.save(newCart);
+
+        return createdUser;
     }
 
     @Override
