@@ -88,12 +88,15 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header loggedInUser={loggedInUser} cartItems={loggedInUser?.cart?.items} />
+        <Header loggedInUser={loggedInUser} cart={loggedInUser?.cart} />
         <MainContent>
           <Routes>
             {/* User Routes */}
             <Route path="/" element={<HomePage loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
-            <Route path="/products/:productId" element={<ProductDetail loggedInUser={loggedInUser} />} />
+            <Route 
+              path="/products/:productId" 
+              element={<ProductDetail loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}
+            />
             <Route path="/cart" element={<Cart loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
             <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
             <Route path="/register" element={<Register />} />

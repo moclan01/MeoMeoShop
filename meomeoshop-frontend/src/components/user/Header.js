@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 import MeoMeoLogo from '../../assets/logo.png';
 
-function Header({ cartItems, loggedInUser }) {
+function Header({ cart, loggedInUser }) {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
 
@@ -15,7 +15,7 @@ function Header({ cartItems, loggedInUser }) {
   }
 
   // Calculate the total number of unique items in the cart
-  const totalItems = cartItems ? cartItems.length : 0;
+  const totalItems = cart?.items ? cart.items.length : 0;
 
   return (
     <header className="header-container">

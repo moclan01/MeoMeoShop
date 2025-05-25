@@ -1,57 +1,95 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; // To get route parameters
 import '../styles/ProductDetail.css';
-import ProductImage from '../../assets/product.png'; // Import the common product image
 
-function ProductDetail({ cartItems, setCartItems }) {
+function ProductDetail({ loggedInUser, updateCartInUserState }) {
   const { productId } = useParams(); // Get product ID from URL
   const [product, setProduct] = useState(null); // State to store product details
   const [loading, setLoading] = useState(true); // State for loading indicator
   const [error, setError] = useState(null); // State for error handling
 
-  // Mock data (replace with API call later)
-  const mockProducts = [
-    { id: '1', name: 'Thức Ăn Hạt Pedigree Dành Cho Chó Trưởng Thành - Vị Bò Nướng', price: '45.000vnđ', description: 'Mô tả chi tiết sản phẩm 1...', imageUrl: ProductImage, category: 'Thức ăn hạt', brand: 'Pedigree' },
-    { id: '2', name: 'Thức Ăn Hạt Me-o Kitten Ocean Fish - 400g', price: '50.000vnđ', description: 'Mô tả chi tiết sản phẩm 2...', imageUrl: ProductImage, category: 'Thức ăn hạt', brand: 'Me-o' },
-    { id: '3', name: 'Thức Ăn Hạt Pedigree Vị Trứng Sữa - Chó Con', price: '215.000vnđ', description: 'Mô tả chi tiết sản phẩm 3...', imageUrl: ProductImage, category: 'Thức ăn hạt', brand: 'Pedigree' },
-    { id: '4', name: 'Bánh Xương Dentastix Pedigree Cho Chó Trung (98g)', price: '40.000vnđ', description: 'Mô tả chi tiết sản phẩm 4...', imageUrl: ProductImage, category: 'Bánh thưởng', brand: 'Pedastix' },
-    { id: '5', name: 'Pate Cho Mèo Lớn Whiskas Vị Cá Thu', price: '20.000vnđ', description: 'Mô tả chi tiết sản phẩm 5...', imageUrl: ProductImage, category: 'PATE', brand: 'Whiskas' },
-    { id: '6', name: 'Đồ Chơi Chuột Vờn Cho Mèo', price: '30.000vnđ', description: 'Mô tả chi tiết sản phẩm 6...', imageUrl: ProductImage, category: 'Đồ chơi', brand: 'PetToy' },
-  ];
-
   useEffect(() => {
-    // In a real application, you would fetch data from an API here
-    // For now, find the product in mock data based on productId
-    const foundProduct = mockProducts.find(p => p.id === productId);
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:8080/api/products/${productId}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError('Không tìm thấy sản phẩm.');
+            setProduct(null);
+          } else {
+             throw new Error(`Lỗi khi tải sản phẩm: ${response.status}`);
+          }
+        } else {
+          const data = await response.json();
+          setProduct(data);
+          setError(null);
+        }
+      } catch (err) {
+        console.error('Error fetching product details:', err);
+        setError('Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.');
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (foundProduct) {
-      setProduct(foundProduct);
-      setError(null);
-    } else {
-      setProduct(null);
-      setError('Không tìm thấy sản phẩm'); // Product not found
-    }
-
-    setLoading(false);
+    fetchProduct();
 
   }, [productId]); // Re-run effect when productId changes
 
-  // Hàm xử lý thêm sản phẩm vào giỏ hàng
-  const handleAddToCart = (productToAdd) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === productToAdd.id);
-      if (existingItem) {
-        // Nếu sản phẩm đã có trong giỏ, tăng số lượng
-        return prevItems.map(item =>
-          item.id === productToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        // Nếu sản phẩm chưa có, thêm mới với số lượng là 1
-        // Chuyển đổi giá về dạng số để tính toán và thêm thuộc tính 'image'
-        const numericPrice = parseFloat(productToAdd.price.replace('.', '').replace('vnđ', ''));
-        return [...prevItems, { ...productToAdd, quantity: 1, price: numericPrice, image: 'product.png' }]; // Add image field and numeric price
+  // Hàm xử lý thêm sản phẩm vào giỏ hàng (gọi API)
+  const handleAddToCart = async () => { // Modify to call API
+    // Kiểm tra xem người dùng đã đăng nhập và có cartId chưa
+    if (!loggedInUser || !loggedInUser.cart || !loggedInUser.cart.cartId) {
+      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+      return;
+    }
+
+    const cartId = loggedInUser.cart.cartId;
+    const quantity = 1; // Mặc định thêm 1 sản phẩm
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/cart-items?cartId=${cartId}&productId=${product.productId}&quantity=${quantity}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        console.error('Error adding to cart API response:', errorData);
+        let errorMessage = 'Có lỗi xảy ra khi thêm sản phẩm vào giỏ.';
+        if(response.status === 400) errorMessage = 'Yêu cầu không hợp lệ.';
+        if(response.status === 404) errorMessage = 'Sản phẩm hoặc giỏ hàng không tồn tại.';
+        alert(errorMessage + ' Vui lòng thử lại.');
+        return;
       }
-    });
+
+      alert('Sản phẩm đã được thêm vào giỏ hàng!');
+      const cartItemResponse = await response.json();
+      console.log('Product added to cart successfully:', cartItemResponse);
+
+      // Fetch the updated cart details after adding an item
+      if (loggedInUser?.userId) {
+        try {
+          const cartResponse = await fetch(`http://localhost:8080/api/carts/by-user/${loggedInUser.userId}`);
+          if (cartResponse.ok) {
+            const updatedCartData = await cartResponse.json();
+            updateCartInUserState(updatedCartData); // Update cart state in App.js
+          } else {
+            console.error('Failed to fetch updated cart after adding item:', cartResponse.status);
+          }
+        } catch (error) {
+          console.error('Error fetching updated cart after adding item:', error);
+        }
+      }
+
+    } catch (error) {
+      console.error('Error calling add to cart API:', error);
+      alert('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+    }
   };
 
   if (loading) {
@@ -69,19 +107,20 @@ function ProductDetail({ cartItems, setCartItems }) {
   return (
     <div className="product-detail-container">
       <div className="product-detail-image">
-        <img src={product.imageUrl} alt={product.name} />
+        <img src={product.imageUrl} alt={product.name} onError={(e) => { e.target.onerror = null; e.target.src="/path/to/placeholder-image.png" }}/>
       </div>
       <div className="product-detail-info">
         <h2>{product.name}</h2>
-        <p className="price">Giá: {product.price}</p>
-        <p className="category">Danh mục: {product.category}</p>
-        <p className="brand">Thương hiệu: {product.brand}</p>
+        <p className="price">Giá: {product.price ? product.price.toLocaleString('vi-VN') + 'đ' : 'N/A'}</p>
+        {product.categories && product.categories.length > 0 && (
+          <p className="category">Danh mục: {product.categories.map(cat => cat.name).join(', ')}</p>
+        )}
         <div className="description">
           <h3>Mô tả sản phẩm:</h3>
           <p>{product.description}</p>
         </div>
         {/* Add to cart button */}
-        <button className="add-to-cart-button" onClick={() => handleAddToCart(product)}>Thêm vào giỏ</button>
+        <button className="add-to-cart-button" onClick={handleAddToCart}>Thêm vào giỏ</button>
         {/* Placeholder for reviews/ratings */}
         <div className="reviews">
           <h3>Đánh giá:</h3>
