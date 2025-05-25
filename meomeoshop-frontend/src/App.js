@@ -25,6 +25,8 @@ import MainContent from './components/layout/MainContent';
 import Order from './components/user/Order';
 import OrderSuccess from './components/user/OrderSuccess';
 import Orders from './components/user/Orders';
+// Import Contact component
+import Contact from './components/user/Contact';
 
 function App() {
   // State for logged-in user, initialized from localStorage
@@ -107,6 +109,9 @@ function App() {
             <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="/orders" element={<Orders loggedInUser={loggedInUser} />} />
             <Route path="/profile" element={<Profile onLogout={handleLogout} />} />
+
+            {/* New Contact Route */}
+            <Route path="/contact" element={<Contact />} />
 
             {/* Admin Routes - Protected by PrivateRoute */}
             <Route
