@@ -65,7 +65,7 @@ function AdminCategories() {
     setIsDeleteModalOpen(false);
   };
 
-  const categoryToDeleteName = categories.find(cat => cat.id === categoryToDeleteId)?.name || '';
+  const categoryToDeleteName = categories.find(cat => cat.categoryId === categoryToDeleteId)?.name || '';
 
   if (loading && !categories.length) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} onRetry={fetchCategories} />;
