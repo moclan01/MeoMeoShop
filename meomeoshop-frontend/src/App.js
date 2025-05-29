@@ -27,6 +27,8 @@ import OrderSuccess from './components/user/OrderSuccess';
 import Orders from './components/user/Orders';
 // Import Contact component
 import Contact from './components/user/Contact';
+import AddCategory from './components/admin/CRUD/AddCategory';
+import EditCategory from './components/admin/CRUD/UpdateCategory';
 
 function App() {
   // State for logged-in user, initialized from localStorage
@@ -95,15 +97,15 @@ function App() {
           <Routes>
             {/* User Routes */}
             <Route path="/" element={<HomePage loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
-            <Route 
-              path="/products/:productId" 
+            <Route
+              path="/products/:productId"
               element={<ProductDetail loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}
             />
             <Route path="/cart" element={<Cart loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
             <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
             <Route path="/register" element={<Register />} />
-            <Route 
-              path="/checkout" 
+            <Route
+              path="/checkout"
               element={<Order loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}
             />
             <Route path="/order-success" element={<OrderSuccess />} />
@@ -128,6 +130,8 @@ function App() {
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="categories" element={<AdminCategories />} />
+              <Route path="categories/add" element={<AddCategory />} />
+              <Route path="categories/edit/:categoryId" element={<EditCategory />} />
             </Route>
           </Routes>
         </MainContent>

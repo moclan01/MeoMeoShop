@@ -17,7 +17,7 @@ function AdminCategories() {
 
   useEffect(() => {
     fetchCategories();
-  }, [fetchCategories]);
+  }, []);
 
   async function fetchCategories() {
     try {
@@ -33,13 +33,12 @@ function AdminCategories() {
   }
 
 
-
   const handleAddCategory = () => {
-    navigate('/categories/add');
+    navigate('/admin/categories/add');
   };
 
   const handleEditCategory = (categoryId) => {
-    navigate(`/categories/edit/${categoryId}`);
+    navigate(`/admin/categories/edit/${categoryId}`);
   };
 
   const handleDeleteClick = (categoryId) => {
@@ -88,12 +87,14 @@ function AdminCategories() {
         </thead>
         <tbody>
           {categories.map(category => (
-            <tr key={category.id}>
-              <td>{category.id}</td>
+            <tr key={category.categoryId}>
+              <td>{category.categoryId}</td>
               <td>{category.name}</td>
               <td>
-                <button className="edit" onClick={() => handleEditCategory(category.id)}>Sửa</button>
-                <button className="delete" onClick={() => handleDeleteClick(category.id)}>Xóa</button>
+                <button className="edit" onClick={() => { 
+                  console.log('Edit clicked for categoryId:', category.categoryId);
+                  handleEditCategory(category.categoryId) }}>Sửa</button>
+                <button className="delete" onClick={() => handleDeleteClick(category.categoryId)}>Xóa</button>
               </td>
             </tr>
           ))}
