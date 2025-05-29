@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import '../styles/Admin.css';
 
 function AdminDashboard({ onLogout }) {
@@ -12,6 +12,10 @@ function AdminDashboard({ onLogout }) {
     navigate('/');
   };
 
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
   return (
     <div className="admin-dashboard">
       <aside className="admin-sidebar">
@@ -19,20 +23,50 @@ function AdminDashboard({ onLogout }) {
         <nav>
           <ul>
             <li>
-              <Link to="/admin/products">Quản lý Sản phẩm</Link>
+              <button
+                type="button"
+                className="nav-button"
+                onClick={() => handleNavigate('/admin/products')}
+              >
+                Quản lý Sản phẩm
+              </button>
             </li>
             <li>
-              <Link to="/admin/categories">Quản lý Danh mục</Link>
+              <button
+                type="button"
+                className="nav-button"
+                onClick={() => handleNavigate('/admin/categories')}
+              >
+                Quản lý Danh mục
+              </button>
             </li>
             <li>
-              <Link to="/admin/orders">Quản lý Đơn hàng</Link>
+              <button
+                type="button"
+                className="nav-button"
+                onClick={() => handleNavigate('/admin/orders')}
+              >
+                Quản lý Đơn hàng
+              </button>
             </li>
             <li>
-              <Link to="/admin/customers">Quản lý Khách hàng</Link>
+              <button
+                type="button"
+                className="nav-button"
+                onClick={() => handleNavigate('/admin/customers')}
+              >
+                Quản lý Khách hàng
+              </button>
             </li>
-            {/* Add more admin navigation links here */}
+            {/* Add more admin navigation buttons here */}
             <li>
-                <button className="admin-logout-button" onClick={handleLogoutClick}>Đăng xuất</button>
+              <button
+                type="button"
+                className="admin-logout-button"
+                onClick={handleLogoutClick}
+              >
+                Đăng xuất
+              </button>
             </li>
           </ul>
         </nav>

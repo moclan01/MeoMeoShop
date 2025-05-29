@@ -1,51 +1,45 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/AdminCategories.css';
-import CategoryModal from './CategoryModal';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
 import DeleteConfirmModal from '../common/DeleteConfirmModal';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../service/axiosInstance';
 
 function AdminCategories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [categoryToDeleteId, setCategoryToDeleteId] = useState(null);
 
-  const fetchCategories = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const mockCategories = [
-        { id: 1, name: 'Electronics' },
-        { id: 2, name: 'Books' },
-        { id: 3, name: 'Clothing' },
-      ];
-      setCategories(mockCategories);
-    } catch (err) {
-      setError('Không thể tải danh sách danh mục. Vui lòng thử lại sau.');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
 
+  async function fetchCategories() {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axiosInstance.get('/categories');
+      setCategories(response.data);
+    } catch (err) {
+      setError('Không thể tải danh sách danh mục. Vui lòng thử lại sau.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
+
   const handleAddCategory = () => {
-    setSelectedCategory(null);
-    setIsModalOpen(true);
+    navigate('/categories/add');
   };
 
   const handleEditCategory = (categoryId) => {
-    const category = categories.find(c => c.id === categoryId);
-    setSelectedCategory(category);
-    setIsModalOpen(true);
+    navigate(`/categories/edit/${categoryId}`);
   };
 
   const handleDeleteClick = (categoryId) => {
@@ -56,9 +50,8 @@ function AdminCategories() {
   const handleDeleteConfirm = async () => {
     try {
       setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setCategories(categories.filter(c => c.id !== categoryToDeleteId));
+      await axiosInstance.delete(`/categories/${categoryToDeleteId}`);
+      await fetchCategories();
       setCategoryToDeleteId(null);
       setIsDeleteModalOpen(false);
     } catch (err) {
@@ -71,30 +64,6 @@ function AdminCategories() {
   const handleDeleteCancel = () => {
     setCategoryToDeleteId(null);
     setIsDeleteModalOpen(false);
-  };
-
-  const handleSubmitCategory = async (formData) => {
-    try {
-      setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      if (selectedCategory) {
-        setCategories(categories.map(c => 
-          c.id === selectedCategory.id ? { ...c, ...formData } : c
-        ));
-      } else {
-        const newCategory = {
-          id: categories.length ? Math.max(...categories.map(c => c.id)) + 1 : 1,
-          ...formData
-        };
-        setCategories([...categories, newCategory]);
-      }
-      setIsModalOpen(false);
-    } catch (err) {
-      setError('Không thể lưu danh mục. Vui lòng thử lại sau.');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const categoryToDeleteName = categories.find(cat => cat.id === categoryToDeleteId)?.name || '';
@@ -130,13 +99,6 @@ function AdminCategories() {
           ))}
         </tbody>
       </table>
-
-      <CategoryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        category={selectedCategory}
-        onSubmit={handleSubmitCategory}
-      />
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}

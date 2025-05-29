@@ -132,3 +132,22 @@
 .admin-logout-button:hover {
   background-color: #5e3f42; /* Màu đỏ đậm hơn khi hover */
 } 
+
+.nav-button {
+  background: transparent;    /* Nền trong suốt */
+  border: none;               /* Bỏ viền */
+  color: white;             /* Màu chữ xanh (có thể thay đổi) */
+  font-size: 1rem;
+  padding: 8px 12px;
+  text-align: left;
+  width: 100%;                /* Full rộng bằng parent */
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-button:hover,
+.nav-button:focus {
+  background-color: rgba(255, 255, 255, 0.2);             
+  color: white ; 
+  outline: none;
+}
