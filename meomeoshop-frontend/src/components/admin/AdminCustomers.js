@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+
 import '../styles/AdminCustomers.css';
 import CustomerDetailModal from './CustomerDetailModal';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
+import axiosInstance from '../../service/axiosInstance';
 
 function AdminCustomers() {
   const [customers, setCustomers] = useState([]);
@@ -15,14 +17,11 @@ function AdminCustomers() {
     try {
       setLoading(true);
       setError(null);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const mockCustomers = [
-        { id: 1, name: 'Nguyễn Văn A', email: 'a@example.com', phone: '0123456789', address: '123 Đường ABC, Quận XYZ, TP.HCM', orders: [{ id: 101, date: '2024-03-15', total: 430000, status: 'Processing' }, { id: 102, date: '2024-03-10', total: 280000, status: 'Delivered' }] },
-        { id: 2, name: 'Trần Thị B', email: 'b@example.com', phone: '0987654321', address: '456 Đường DEF, Quận UVW, TP.HCM', orders: [{ id: 103, date: '2024-03-14', total: 480000, status: 'Shipped' }] }
-      ];
-      setCustomers(mockCustomers);
+
+      const response = await axiosInstance.get('/users');
+      setCustomers(response.data || []);
     } catch (err) {
+      console.error(err);
       setError('Không thể tải danh sách khách hàng. Vui lòng thử lại sau.');
     } finally {
       setLoading(false);
@@ -33,8 +32,8 @@ function AdminCustomers() {
     fetchCustomers();
   }, [fetchCustomers]);
 
-  const handleViewCustomer = (customerId) => {
-    const customer = customers.find(c => c.id === customerId);
+  const handleViewCustomer = (userId) => {
+    const customer = customers.find(c => c.userId === userId);
     setSelectedCustomer(customer);
     setIsModalOpen(true);
   };
@@ -52,20 +51,22 @@ function AdminCustomers() {
             <th>Tên khách hàng</th>
             <th>Email</th>
             <th>Số điện thoại</th>
-            <th>Số đơn hàng</th>
+            <th>Địa chỉ</th>
+            <th>Vai trò</th>
             <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
           {customers.map(customer => (
-            <tr key={customer.id}>
-              <td>{customer.id}</td>
+            <tr key={customer.userId}>
+              <td>{customer.userId}</td>
               <td>{customer.name}</td>
               <td>{customer.email}</td>
-              <td>{customer.phone}</td>
-              <td>{customer.orders?.length || 0}</td>
+              <td>{customer.phone || '—'}</td>
+              <td>{customer.address || '—'}</td>
+              <td>{customer.role}</td>
               <td>
-                <button className="edit" onClick={() => handleViewCustomer(customer.id)} disabled={loading}>
+                <button className="edit" onClick={() => handleViewCustomer(customer.userId)} disabled={loading}>
                   Xem chi tiết
                 </button>
               </td>
@@ -83,4 +84,4 @@ function AdminCustomers() {
   );
 }
 
-export default AdminCustomers; 
+export default AdminCustomers;

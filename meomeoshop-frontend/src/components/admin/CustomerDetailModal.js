@@ -11,39 +11,44 @@ function CustomerDetailModal({ isOpen, onClose, customer }) {
           <h2>Thông tin Khách hàng</h2>
           <button className="close-button" onClick={onClose}>&times;</button>
         </div>
+
         <div className="customer-detail">
           <div className="customer-info">
             <h3>Thông tin cá nhân</h3>
-            <p><strong>ID:</strong> {customer.id}</p>
+            <p><strong>ID:</strong> {customer.userId}</p>
             <p><strong>Họ tên:</strong> {customer.name}</p>
             <p><strong>Email:</strong> {customer.email}</p>
-            <p><strong>Số điện thoại:</strong> {customer.phone}</p>
-            <p><strong>Địa chỉ:</strong> {customer.address}</p>
+            <p><strong>Số điện thoại:</strong> {customer.phone || '—'}</p>
+            <p><strong>Địa chỉ:</strong> {customer.address || '—'}</p>
+            <p><strong>Vai trò:</strong> {customer.role}</p>
+            <p><strong>Số đánh giá đã viết:</strong> {customer.reviews?.length || 0}</p>
           </div>
 
-          <div className="customer-orders">
-            <h3>Lịch sử đơn hàng</h3>
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Mã đơn hàng</th>
-                  <th>Ngày đặt</th>
-                  <th>Tổng tiền</th>
-                  <th>Trạng thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                {customer.orders?.map(order => (
-                  <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.date}</td>
-                    <td>{order.total.toLocaleString('vi-VN')}đ</td>
-                    <td>{order.status}</td>
+          {customer.orders && customer.orders.length > 0 && (
+            <div className="customer-orders">
+              <h3>Lịch sử đơn hàng</h3>
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {customer.orders.map(order => (
+                    <tr key={order.id}>
+                      <td>{order.id}</td>
+                      <td>{order.date}</td>
+                      <td>{order.total?.toLocaleString('vi-VN')}đ</td>
+                      <td>{order.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

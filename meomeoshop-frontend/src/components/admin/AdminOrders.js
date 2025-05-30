@@ -3,6 +3,8 @@ import '../styles/AdminOrders.css';
 import OrderDetailModal from './OrderDetailModal';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
+import axiosInstance from '../../service/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -10,18 +12,13 @@ function AdminOrders() {
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const mockOrders = [
-        { id: 101, customer: 'Nguyễn Văn A', orderDate: '2024-03-15', status: 'Processing', shippingAddress: '123 Đường ABC, Quận XYZ, TP.HCM', paymentMethod: 'Chuyển khoản', items: [{ name: 'Product A', quantity: 2, price: 100000 }, { name: 'Product B', quantity: 1, price: 200000 }], subtotal: 400000, shippingFee: 30000, total: 430000 },
-        { id: 102, customer: 'Trần Thị B', orderDate: '2024-03-14', status: 'Shipped', shippingAddress: '456 Đường DEF, Quận UVW, TP.HCM', paymentMethod: 'Tiền mặt', items: [{ name: 'Product C', quantity: 3, price: 150000 }], subtotal: 450000, shippingFee: 30000, total: 480000 }
-      ];
-      setOrders(mockOrders);
+      const response = await axiosInstance.get('/orders');
+      setOrders(response.data);
     } catch (err) {
       setError('Không thể tải danh sách đơn hàng. Vui lòng thử lại sau.');
     } finally {
@@ -36,8 +33,7 @@ function AdminOrders() {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await axiosInstance.put(`/orders/${orderId}`, { status: newStatus });
       setOrders(prevOrders =>
         prevOrders.map(order =>
           order.id === orderId ? { ...order, status: newStatus } : order
@@ -56,12 +52,19 @@ function AdminOrders() {
     setIsModalOpen(true);
   };
 
+  const handleAddOrder = () => {
+    navigate('/admin/categories/add');
+  };
+
   if (loading && !orders.length) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} onRetry={fetchOrders} />;
 
   return (
     <div className="admin-orders-section">
       <h1>Quản lý Đơn hàng</h1>
+      <div className="admin-orders-actions">
+        <button onClick={handleAddOrder}>Thêm Đơn hàng Mới</button>
+      </div>
       <table className="admin-table">
         <thead>
           <tr>
@@ -80,18 +83,7 @@ function AdminOrders() {
               <td>{order.customer}</td>
               <td>{order.orderDate}</td>
               <td>{order.total.toLocaleString('vi-VN')}đ</td>
-              <td>
-                <select
-                  value={order.status}
-                  onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                  className="order-status-select"
-                >
-                  <option value="Processing">Đang xử lý</option>
-                  <option value="Shipped">Đã gửi hàng</option>
-                  <option value="Delivered">Đã giao hàng</option>
-                  <option value="Cancelled">Đã hủy</option>
-                </select>
-              </td>
+              <td>{order.status}</td>
               <td>
                 <button className="edit" onClick={() => handleViewOrder(order.id)} disabled={loading}>
                   Xem chi tiết
@@ -111,4 +103,4 @@ function AdminOrders() {
   );
 }
 
-export default AdminOrders; 
+export default AdminOrders;
