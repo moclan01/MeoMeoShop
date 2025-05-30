@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import '../styles/AdminProducts.css';
 import DeleteConfirmModal from '../common/DeleteConfirmModal';
 import axiosInstance from '../../service/axiosInstance';
+import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDeleteId, setProductToDeleteId] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchProducts();
@@ -32,7 +35,7 @@ function AdminProducts() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axiosInstance.delete(`/api/products/${productToDeleteId}`);
+      await axiosInstance.delete(`/products/${productToDeleteId}`);
       setIsDeleteModalOpen(false);
       setProductToDeleteId(null);
       fetchProducts();
@@ -46,12 +49,22 @@ function AdminProducts() {
     setProductToDeleteId(null);
   };
 
+  const handleAddProduct = () => {
+    navigate('/admin/products/add');
+  };
+
+  const handleEditProduct = (productId) => {
+    navigate(`/admin/products/edit/${productId}`);
+  }
+
   const productToDeleteName = products.find(p => p.productId === productToDeleteId)?.name || '';
   console.log('Render products:', products);
   return (
     <div className="admin-products-section">
       <h1>Quản lý Sản phẩm</h1>
-
+      <div className="admin-product-actions">
+        <button className="btn btn-primary" onClick={handleAddProduct}>Thêm sản phẩm Mới</button>
+      </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <table className="admin-table">
@@ -94,6 +107,13 @@ function AdminProducts() {
                 </td>
                 <td>{product.stock !== undefined && product.stock !== null ? product.stock : 'N/A'}</td>
                 <td>
+                  <button
+                    className="edit"
+                    onClick={() => handleEditProduct(product.productId)}
+                    style={{ marginRight: 8 }}
+                  >
+                    Sửa
+                  </button>
                   <button
                     className="delete"
                     onClick={() => handleDeleteClick(product.productId)}

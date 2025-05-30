@@ -29,6 +29,7 @@ import Orders from './components/user/Orders';
 import Contact from './components/user/Contact';
 import AddCategory from './components/admin/CRUD/AddCategory';
 import EditCategory from './components/admin/CRUD/UpdateCategory';
+import AddProduct from './components/admin/CRUD/AddProduct';
 
 function App() {
   // State for logged-in user, initialized from localStorage
@@ -127,6 +128,7 @@ function App() {
               <Route index element={<AdminDashboardContent />} />
               <Route path="dashboard" element={<AdminDashboardContent />} />
               <Route path="products" element={<AdminProducts />} />
+              <Route path="products/add" element={<AddProduct />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="categories" element={<AdminCategories />} />
