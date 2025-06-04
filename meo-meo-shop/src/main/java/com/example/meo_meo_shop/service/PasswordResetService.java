@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
@@ -97,7 +98,8 @@ public class PasswordResetService {
     }
 
     // Helper method to calculate expiry date (e.g., 24 hours from now)
-    private Date calculateExpiryDate() {
-        return Date.from(Instant.now().plus(24, ChronoUnit.HOURS));
+    private LocalDateTime calculateExpiryDate() {
+        // Get the current LocalDateTime and add 24 hours
+        return LocalDateTime.now().plus(24, ChronoUnit.HOURS);
     }
 } 
