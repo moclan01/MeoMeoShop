@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/product-categories/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/forgot-password").permitAll()
                         // API tạo đơn hàng (tạm thời cho phép công khai)
                         .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
                         // Tạm thời: Cho phép endpoint xóa giỏ hàng (cần xem xét lại bảo mật sau)
