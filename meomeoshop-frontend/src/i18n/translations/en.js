@@ -63,6 +63,13 @@ export const enTranslations = {
     registerSuccess: 'Registration successful!',
     loginError: 'Login failed. Please check your credentials.',
     noAccount: "Don't have an account?",
+    passwordsDoNotMatch: 'Passwords do not match.',
+    passwordResetSuccess: 'Your password has been reset successfully. You will be redirected to the login page shortly.',
+    newPassword: 'New Password',
+    resetPasswordError: 'Failed to reset password. Please try again or contact support.',
+    checkEmailInstructions: 'Please check your inbox and spam folder for the password reset link.',
+    sendResetLink: 'Send Reset Link',
+    backToLogin: 'Back To Login',
   },
   product: {
     addToCart: 'Add to Cart',

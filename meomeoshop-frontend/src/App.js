@@ -10,6 +10,8 @@ import Cart from './components/user/Cart';
 import Login from './components/user/Login';
 import Register from './components/user/Register';
 import Checkout from './components/user/Checkout';
+import ForgotPassword from './components/user/ForgotPassword';
+import ResetPassword from './components/user/ResetPassword';
 // Import Profile component
 import Profile from './components/user/Profile';
 // Import Admin components
@@ -107,6 +109,8 @@ function App() {
             <Route path="/cart" element={<Cart loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
             <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route
               path="/checkout"
               element={<Order loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}

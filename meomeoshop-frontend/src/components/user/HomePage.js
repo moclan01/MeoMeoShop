@@ -125,43 +125,54 @@ const HomePage = ({ loggedInUser, updateCartInUserState }) => {
   };
 
   // Hàm xử lý thêm sản phẩm vào giỏ hàng (gọi API)
-  const handleAddToCart = async (product) => { // Đổi thành async function
-    // Kiểm tra xem người dùng đã đăng nhập và có cartId chưa
+  const handleAddToCart = async (product) => {
     if (!loggedInUser || !loggedInUser.cart || !loggedInUser.cart.cartId) {
       alert(t('cart.loginRequired'));
       return;
     }
-
+  
     const cartId = loggedInUser.cart.cartId;
     const productId = product.productId;
-    const quantity = 1; // Mặc định thêm 1 sản phẩm
-
+    const quantity = 1;
+    const userId = loggedInUser.userId; // Lấy userId từ loggedInUser
+  
     try {
-      const response = await fetch(`http://localhost:8080/api/carts/${cartId}/items`, {
+      // Gửi request thêm sản phẩm vào giỏ hàng
+      const addResponse = await fetch(`http://localhost:8080/api/cart-items?cartId=${cartId}&productId=${productId}&quantity=${quantity}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId: productId,
-          quantity: quantity,
-        }),
+        }
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || t('product.addToCartError'));
+  
+      if (!addResponse.ok) {
+         const errorText = await addResponse.text(); // Read the response body as text
+         console.error('Add to cart failed response:', addResponse.status, errorText);
+        throw new Error(t('product.addToCartError'));
       }
-
-      const updatedCart = await response.json();
-      updateCartInUserState(loggedInUser, updatedCart); // Update cart state in App.js
+  
+      // Sau khi thêm thành công, fetch lại toàn bộ thông tin giỏ hàng của user
+      const fetchCartResponse = await fetch(`http://localhost:8080/api/carts/by-user/${userId}`, {
+         credentials: 'include' // Đảm bảo gửi cookie session
+      });
+  
+      if (!fetchCartResponse.ok) {
+         const errorText = await fetchCartResponse.text(); // Read the response body as text
+         console.error('Failed to refetch cart after adding item:', fetchCartResponse.status, errorText);
+        throw new Error(t('cart.fetchError')); // Thêm lỗi nếu không fetch được giỏ hàng
+      }
+  
+      const updatedCartData = await fetchCartResponse.json();
+      updateCartInUserState(updatedCartData); // Cập nhật state user với giỏ hàng mới
       alert(t('product.addToCartSuccess'));
-
+  
     } catch (error) {
       console.error('Error adding product to cart:', error);
       alert(error.message);
     }
   };
+  
+  
 
   if (loadingProducts) {
     return <div className="home-loading">{t('common.loading')}</div>;

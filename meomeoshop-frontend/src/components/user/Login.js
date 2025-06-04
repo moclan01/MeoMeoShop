@@ -76,7 +76,7 @@ const Login = ({ role, onLoginSuccess }) => {
           </button>
         </form>
         {role !== 'admin' && (
-          <Link to="/register" className="auth-link">{t('auth.noAccount')} <Link to="/register">{t('Register')}</Link></Link>
+          <Link to="/register" className="auth-link">{t('auth.noAccount')} {t('Register')}</Link>
         )}
         <div className="auth-links">
           <Link to="/forgot-password">{t('auth.forgotPassword')}</Link>

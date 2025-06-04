@@ -63,6 +63,13 @@ export const viTranslations = {
     registerSuccess: 'Đăng ký thành công!',
     loginError: 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.',
     noAccount: 'Chưa có tài khoản?',
+    passwordsDoNotMatch: 'Mật khẩu xác nhận không khớp.',
+    passwordResetSuccess: 'Mật khẩu của bạn đã được đặt lại thành công.',
+    newPassword: 'Mật khẩu mới',
+    resetPasswordError: 'Đặt lại mật khẩu thất bại. Vui lòng thử lại hoặc liên hệ hỗ trợ.',
+    checkEmailInstructions: 'Vui lòng kiểm tra hộp thư đến và thư mục spam để tìm liên kết đặt lại mật khẩu.',
+    backToLogin: 'Quay lại đăng nhập',
+    sendResetLink: 'Gửi liên kết đặt lại',
   },
   product: {
     addToCart: 'Thêm vào giỏ',

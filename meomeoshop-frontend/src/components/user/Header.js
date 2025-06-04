@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import '../styles/Header.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
-import MeoMeoLogo from '../../assets/logo.png';
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../common/LanguageSwitcher';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import "../styles/Header.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import MeoMeoLogo from "../../assets/logo.png";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../common/LanguageSwitcher";
 
 function Header({ cart, loggedInUser }) {
   const location = useLocation();
-  const isAdminPage = location.pathname.startsWith('/admin');
+  const isAdminPage = location.pathname.startsWith("/admin");
   const { t } = useTranslation();
 
   // If we're on an admin page, don't render the header
@@ -30,44 +30,40 @@ function Header({ cart, loggedInUser }) {
         </div>
         <nav className="header-nav">
           <ul>
-            <li><Link to="/">{t('common.home')}</Link></li>
-            <li><Link to="/products">{t('common.products')}</Link></li>
-            <li><Link to="/contact">{t('common.contact')}</Link></li>
+            <li>
+              <Link to="/">{t("common.home")}</Link>
+            </li>
+            <li>
+              <Link to="/contact">{t("common.contact")}</Link>
+            </li>
           </ul>
         </nav>
       </div>
+
       <div className="header-right">
-        {/* Removed Search Bar */}
-        {/* <div className="search-bar">
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            value={searchTerm}
-            onChange={onSearchChange}
-            className="search-input" 
-          />
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
-        </div> */}
-        <Link to="/cart" className="header-icon"><FontAwesomeIcon icon={faShoppingCart} /><sup>{totalItems}</sup></Link>
+        <Link to="/cart" className="header-icon">
+          <FontAwesomeIcon icon={faShoppingCart} />
+          <sup>{totalItems}</sup>
+        </Link>
 
         {/* User Account Icon - Conditional rendering based on login status */}
         {loggedInUser ? (
           // Nếu người dùng đã đăng nhập, hiển thị tên hoặc biểu tượng khác
           <Link to="/profile" className="header-icon user-loggedIn">
             {/* Có thể thay thế bằng tên người dùng: {loggedInUser.name} */}
-            <FontAwesomeIcon icon={faUser} /> 
+            <FontAwesomeIcon icon={faUser} />
             {/* Tùy chọn: thêm dropdown menu cho profile, logout, etc. */}
           </Link>
         ) : (
           // Nếu chưa đăng nhập, hiển thị liên kết Login
-          <Link to="/login" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
+          <Link to="/login" className="header-icon">
+            <FontAwesomeIcon icon={faUser} />
+          </Link>
         )}
-      </div>
-      <div className="header-right">
         <LanguageSwitcher />
       </div>
     </header>
   );
 }
 
-export default Header; 
+export default Header;
