@@ -36,4 +36,14 @@
 .footer-bottom p {
   color: #ccc;
   font-size: 14px;
+}
+
+.social-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #ffd6e0; /* Màu hồng nhạt khi hover */
 } 

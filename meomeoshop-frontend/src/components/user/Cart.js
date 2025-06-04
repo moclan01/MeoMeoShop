@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import '../styles/Cart.css';
 
 function Cart({ loggedInUser, updateCartInUserState }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [backendCart, setBackendCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Define fetchCart outside useEffect and wrap with useCallback
   const fetchCart = useCallback(async (onSuccessCallback) => {
     if (!loggedInUser || !loggedInUser.cart || !loggedInUser.cart.cartId) {
       setLoading(false);
-      setError('Vui lòng đăng nhập để xem giỏ hàng.');
+      setError(t('cart.loginRequired'));
       setBackendCart(null);
       return;
     }
@@ -22,85 +23,86 @@ function Cart({ loggedInUser, updateCartInUserState }) {
     
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/api/carts/${cartId}`);
+      const response = await fetch(`http://localhost:8080/api/carts/${cartId}`, {
+        credentials: 'include'
+      });
       
       if (!response.ok) {
-         if(response.status === 404) {
-             setBackendCart({ items: [] });
-             setLoading(false);
-             setError(null); // Clear previous errors if cart is just empty
-             return;
-         }
+        if(response.status === 404) {
+          setBackendCart({ items: [] });
+          setLoading(false);
+          setError(null);
+          return;
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
       setBackendCart(data);
       if (onSuccessCallback) {
-          onSuccessCallback(data);
+        onSuccessCallback(data);
       }
       setLoading(false);
       setError(null);
 
     } catch (error) {
       console.error('Error fetching cart:', error);
-      setError('Không thể tải giỏ hàng. Vui lòng thử lại sau.');
+      setError(t('cart.fetchError'));
       setLoading(false);
       setBackendCart(null);
     }
-  }, [loggedInUser, updateCartInUserState]); // Add dependencies for fetchCart
+  }, [loggedInUser, t]);
 
   useEffect(() => {
-    // Fetch cart on component mount or when loggedInUser or cartId changes
     fetchCart();
-  }, [fetchCart, loggedInUser?.cart?.cartId]); // Depend on fetchCart and cartId
+  }, [fetchCart, loggedInUser?.cart?.cartId]);
 
   const updateQuantity = async (cartItemId, newQuantity) => {
     if (newQuantity < 1) return;
 
     try {
-        const response = await fetch(`http://localhost:8080/api/cart-items/${cartItemId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ quantity: newQuantity }),
-        });
+      const response = await fetch(`http://localhost:8080/api/cart-items/${cartItemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ quantity: newQuantity }),
+      });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Error updating cart item quantity:', errorData);
-            alert('Cập nhật số lượng thất bại.');
-            return;
-        }
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error updating cart item quantity:', errorData);
+        alert(t('cart.updateQuantityError'));
+        return;
+      }
 
-        // Fetch the updated cart data and update the state via the prop
-        fetchCart(updateCartInUserState);
+      fetchCart(updateCartInUserState);
 
     } catch (error) {
-        console.error('Error calling update quantity API:', error);
-        alert('Không thể kết nối để cập nhật số lượng.');
+      console.error('Error calling update quantity API:', error);
+      alert(t('cart.updateQuantityError'));
     }
   };
 
   const removeItem = async (cartItemId) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/cart-items/${cartItemId}`, {
-            method: 'DELETE',
-        });
+      const response = await fetch(`http://localhost:8080/api/cart-items/${cartItemId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
 
-        if (!response.ok) {
-            console.error('Error removing cart item:', response.status);
-            alert('Xóa sản phẩm khỏi giỏ hàng thất bại.');
-            return;
-        }
+      if (!response.ok) {
+        console.error('Error removing cart item:', response.status);
+        alert(t('cart.removeItemError'));
+        return;
+      }
 
-        // Fetch the updated cart data and update the state via the prop
-        fetchCart(updateCartInUserState);
+      fetchCart(updateCartInUserState);
 
     } catch (error) {
-        console.error('Error calling remove item API:', error);
-        alert('Không thể kết nối để xóa sản phẩm.');
+      console.error('Error calling remove item API:', error);
+      alert(t('cart.removeItemError'));
     }
   };
 
@@ -115,70 +117,82 @@ function Cart({ loggedInUser, updateCartInUserState }) {
 
   const handleCheckoutClick = () => {
     if (!backendCart || !backendCart.items || backendCart.items.length === 0) {
-        alert('Giỏ hàng trống, không thể thanh toán.');
-        return;
+      alert(t('cart.emptyCartError'));
+      return;
     }
     navigate('/checkout');
   };
 
-  return (
-    <div className="cart-page">
-      <div className="container">
-        <h1>Giỏ hàng</h1>
-        {loading && <p>Đang tải giỏ hàng...</p>}
-        {error && <p className="error-message">{error}</p>}
+  if (loading) {
+    return <div className="cart-loading">{t('common.loading')}</div>;
+  }
 
-        {!loading && !error && itemsToDisplay.length === 0 ? (
-          <div className="empty-cart">
-            <p>Giỏ hàng của bạn đang trống</p>
-            <Link to="/" className="continue-shopping">
-              Tiếp tục mua sắm
-            </Link>
-          </div>
-        ) : !loading && !error && (
-          <div className="cart-content">
-            <div className="cart-items">
-              {itemsToDisplay.map(item => (
-                <div key={item.cartItemId} className="cart-item">
-                  <div className="item-image">
-                    {item.product && item.product.imageUrl ? (
-                       <img src={item.product.imageUrl} alt={item.product.name} />
-                    ) : (
-                       <img src={require('../../assets/product.png')} alt={item.product.name} />
-                    )}
-                  </div>
-                  <div className="item-info">
-                    <h3>{item.product ? item.product.name : 'Sản phẩm không rõ tên'}</h3>
-                    <p className="item-price">{item.product ? item.product.price.toLocaleString('vi-VN') + 'đ' : 'N/A'}</p>
-                  </div>
-                  <div className="item-quantity">
-                    <button onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)} disabled={item.quantity <= 1}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}>+</button>
-                  </div>
-                  <div className="item-total">
-                    {(item.product ? item.product.price * item.quantity : 0).toLocaleString('vi-VN')}đ
-                  </div>
-                  <button className="remove-item" onClick={() => removeItem(item.cartItemId)}>
-                    ×
-                  </button>
+  if (error) {
+    return <div className="cart-error">{error}</div>;
+  }
+
+  if (itemsToDisplay.length === 0) {
+    return (
+      <div className="cart-empty">
+        <h2>{t('cart.empty')}</h2>
+        <Link to="/" className="continue-shopping">
+          {t('cart.continueShopping')}
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cart-container">
+      <h2>{t('cart.title')}</h2>
+      <div className="cart-content">
+        {/* Left Column: Cart Items */}
+        <div className="cart-items-list">
+          {itemsToDisplay.map(item => (
+            <div key={item.cartItemId} className="cart-item">
+              <div className="item-image">
+                {item.product && item.product.imageUrl ? (
+                  <img src={item.product.imageUrl} alt={item.product.name} />
+                ) : (
+                  <img src={require('../../assets/product.png')} alt={item.product.name} />
+                )}
+              </div>
+              <div className="item-details">
+                <div className="item-info">
+                  <h3>{item.product ? item.product.name : t('cart.unknownProduct')}</h3>
+                  <p className="item-price">{item.product ? item.product.price.toLocaleString('vi-VN') + 'đ' : t('common.unavailable')}</p>
                 </div>
-              ))}
-            </div>
-            <div className="cart-summary">
-              <h2>Tổng cộng</h2>
-              <div className="summary-row">
-                <span>Số lượng sản phẩm:</span>
-                <span>{totalItems}</span>
+                <div className="item-actions">
+                   <div className="item-quantity-control">
+                     <button onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)} disabled={item.quantity <= 1}>-</button>
+                     <span>{item.quantity}</span>
+                     <button onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}>+</button>
+                   </div>
+                   <div className="item-total-price">
+                     {(item.product ? item.product.price * item.quantity : 0).toLocaleString('vi-VN')}đ
+                   </div>
+                   <button className="remove-item" onClick={() => removeItem(item.cartItemId)}>
+                     ×
+                   </button>
+                </div>
               </div>
-              <div className="summary-row total">
-                <span>Tổng tiền:</span>
-                <span>{totalPrice.toLocaleString('vi-VN')}đ</span>
-              </div>
-              <button className="checkout-button" onClick={handleCheckoutClick}>Thanh toán</button>
             </div>
+          ))}
+        </div>
+
+        {/* Right Column: Summary */}
+        <div className="cart-summary">
+          <h3>{t('cart.total')}</h3>
+          <div className="summary-row">
+            <span>{t('cart.totalItems')}:</span>
+            <span>{totalItems}</span>
           </div>
-        )}
+          <div className="summary-row total">
+            <span>{t('cart.totalPrice')}:</span>
+            <span>{totalPrice.toLocaleString('vi-VN')}đ</span>
+          </div>
+          <button className="checkout-button" onClick={handleCheckoutClick}>{t('cart.checkout')}</button>
+        </div>
       </div>
     </div>
   );

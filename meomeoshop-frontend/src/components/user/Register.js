@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import '../styles/AuthForm.css';
 
 function Register() {
@@ -12,6 +13,7 @@ function Register() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +21,7 @@ function Register() {
     setSuccess('');
 
     if (password !== confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp.');
+      setError(t('registerPage.confirmPasswordMatchError'));
       return;
     }
 
@@ -73,10 +75,10 @@ function Register() {
   return (
     <div className="auth-container">
       <div className="auth-form-box">
-        <h2>Đăng ký tài khoản</h2>
+        <h2>{t('registerPage.title')}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Tên:</label>
+            <label htmlFor="name">{t('profile.name')}:</label>
             <input
               type="text"
               id="name"
@@ -86,7 +88,7 @@ function Register() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email">{t('auth.email')}:</label>
             <input
               type="email"
               id="email"
@@ -96,7 +98,7 @@ function Register() {
             />
           </div>
            <div className="form-group">
-            <label htmlFor="phone">Điện thoại:</label>
+            <label htmlFor="phone">{t('profile.phone')}:</label>
             <input
               type="tel"
               id="phone"
@@ -105,7 +107,7 @@ function Register() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="address">Địa chỉ:</label>
+            <label htmlFor="address">{t('profile.address')}:</label>
             <input
               type="text"
               id="address"
@@ -114,7 +116,7 @@ function Register() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Mật khẩu:</label>
+            <label htmlFor="password">{t('auth.password')}:</label>
             <input
               type="password"
               id="password"
@@ -124,7 +126,7 @@ function Register() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="confirmPassword">Xác nhận mật khẩu:</label>
+            <label htmlFor="confirmPassword">{t('auth.confirmPassword')}:</label>
             <input
               type="password"
               id="confirmPassword"
@@ -137,9 +139,9 @@ function Register() {
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
 
-          <button type="submit" className="auth-button">Đăng ký</button>
+          <button type="submit" className="auth-button">{t('Register')}</button>
         </form>
-        <Link to="/login" className="auth-link">Đã có tài khoản? Đăng nhập</Link>
+        <Link to="/login" className="auth-link">{t('auth.noAccount')} <Link to="/login">{t('Login')}</Link></Link>
       </div>
     </div>
   );

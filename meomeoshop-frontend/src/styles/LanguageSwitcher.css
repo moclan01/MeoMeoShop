@@ -1,0 +1,41 @@
+.language-switcher {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.language-button {
+  min-width: 40px;
+  padding: 5px 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.language-button:hover {
+  transform: scale(1.05);
+}
+
+.language-switcher .btn-group {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.language-switcher .btn {
+  border: none;
+  margin: 0;
+}
+
+.language-switcher .btn-primary {
+  background-color: #007bff;
+}
+
+.language-switcher .btn-outline-primary {
+  color: #007bff;
+  background-color: transparent;
+}
+
+.language-switcher .btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+} 

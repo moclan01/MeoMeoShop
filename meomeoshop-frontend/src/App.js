@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import './i18n/i18n'; // Import i18n configuration
 import Header from './components/user/Header';
 import Footer from './components/user/Footer';
 import HomePage from './components/user/HomePage';

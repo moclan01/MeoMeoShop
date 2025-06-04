@@ -4,10 +4,13 @@ import '../styles/Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 import MeoMeoLogo from '../../assets/logo.png';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../common/LanguageSwitcher';
 
 function Header({ cart, loggedInUser }) {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
+  const { t } = useTranslation();
 
   // If we're on an admin page, don't render the header
   if (isAdminPage) {
@@ -27,8 +30,9 @@ function Header({ cart, loggedInUser }) {
         </div>
         <nav className="header-nav">
           <ul>
-            <li><Link to="/">Trang chủ</Link></li>
-            <li><Link to="/contact">Liên hệ</Link></li>
+            <li><Link to="/">{t('common.home')}</Link></li>
+            <li><Link to="/products">{t('common.products')}</Link></li>
+            <li><Link to="/contact">{t('common.contact')}</Link></li>
           </ul>
         </nav>
       </div>
@@ -58,6 +62,9 @@ function Header({ cart, loggedInUser }) {
           // Nếu chưa đăng nhập, hiển thị liên kết Login
           <Link to="/login" className="header-icon"><FontAwesomeIcon icon={faUser} /></Link>
         )}
+      </div>
+      <div className="header-right">
+        <LanguageSwitcher />
       </div>
     </header>
   );

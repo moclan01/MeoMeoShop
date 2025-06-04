@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import '../styles/Contact.css';
 
 function Contact() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,7 +22,7 @@ function Contact() {
     e.preventDefault();
     // Xử lý gửi form tại đây (ví dụ: gọi API hoặc gửi email)
     console.log('Form data submitted:', formData);
-    alert('Tin nhắn của bạn đã được gửi!');
+    alert(t('contactPage.submitSuccess'));
     // Reset form
     setFormData({
       name: '',
@@ -31,25 +33,25 @@ function Contact() {
 
   return (
     <div className="contact-page-container">
-      <h1>Liên Hệ Với Chúng Tôi</h1>
+      <h1>{t('contactPage.title')}</h1>
       
       <div className="contact-info-form">
         <div className="contact-info">
-          <h2>Thông Tin Liên Hệ</h2>
-          <p>Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu nào, vui lòng liên hệ với chúng tôi qua thông tin dưới đây hoặc điền vào biểu mẫu.</p>
+          <h2>{t('contactPage.infoTitle')}</h2>
+          <p>{t('contactPage.infoMessage')}</p>
           <ul>
-            <li><strong>Địa chỉ:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</li>
-            <li><strong>Điện thoại:</strong> (84) 123-456-789</li>
-            <li><strong>Email:</strong> info@meomeoshop.com</li>
+            <li><strong>{t('contactPage.address')}:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</li>
+            <li><strong>{t('contactPage.phone')}:</strong> (84) 123-456-789</li>
+            <li><strong>{t('contactPage.email')}:</strong> info@meomeoshop.com</li>
           </ul>
           {/* Có thể thêm bản đồ Google Maps tại đây */}
         </div>
 
         <div className="contact-form">
-          <h2>Gửi Tin Nhắn</h2>
+          <h2>{t('contactPage.formTitle')}</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="name">Họ và Tên:</label>
+              <label htmlFor="name">{t('contactPage.name')}:</label>
               <input 
                 type="text" 
                 id="name" 
@@ -61,7 +63,7 @@ function Contact() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email:</label>
+              <label htmlFor="email">{t('auth.email')}:</label>
               <input 
                 type="email" 
                 id="email" 
@@ -73,7 +75,7 @@ function Contact() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Tin Nhắn:</label>
+              <label htmlFor="message">{t('contactPage.message')}:</label>
               <textarea 
                 id="message" 
                 name="message" 
@@ -83,7 +85,7 @@ function Contact() {
               />
             </div>
 
-            <button type="submit" className="submit-button">Gửi Tin Nhắn</button>
+            <button type="submit" className="submit-button">{t('contactPage.submitButton')}</button>
           </form>
         </div>
       </div>
