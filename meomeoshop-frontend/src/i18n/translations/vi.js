@@ -70,6 +70,8 @@ export const viTranslations = {
     checkEmailInstructions: 'Vui lòng kiểm tra hộp thư đến và thư mục spam để tìm liên kết đặt lại mật khẩu.',
     backToLogin: 'Quay lại đăng nhập',
     sendResetLink: 'Gửi liên kết đặt lại',
+    resetPassword: 'Đặt lại mật khẩu',
+    confirmResetPasswordButton: 'Xác nhận'
   },
   product: {
     addToCart: 'Thêm vào giỏ',

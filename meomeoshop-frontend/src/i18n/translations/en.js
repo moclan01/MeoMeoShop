@@ -70,6 +70,8 @@ export const enTranslations = {
     checkEmailInstructions: 'Please check your inbox and spam folder for the password reset link.',
     sendResetLink: 'Send Reset Link',
     backToLogin: 'Back To Login',
+    resetPassword: 'Reset Password',
+    confirmResetPasswordButton: 'Confirm'
   },
   product: {
     addToCart: 'Add to Cart',

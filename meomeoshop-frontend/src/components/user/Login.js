@@ -48,7 +48,7 @@ const Login = ({ role, onLoginSuccess }) => {
   return (
     <div className="auth-container">
       <div className="auth-form-box">
-        <h2>{t('Login')}{role === 'admin' ? ' Admin' : ''}</h2>
+        <h2>{t('common.login')}{role === 'admin' ? ' Admin' : ''}</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -72,11 +72,11 @@ const Login = ({ role, onLoginSuccess }) => {
             />
           </div>
           <button type="submit" className="auth-button">
-            {t('Login')}
+            {t('common.login')}
           </button>
         </form>
         {role !== 'admin' && (
-          <Link to="/register" className="auth-link">{t('auth.noAccount')} {t('Register')}</Link>
+          <Link to="/register" className="auth-link">{t('auth.noAccount')} {t('common.register')}</Link>
         )}
         <div className="auth-links">
           <Link to="/forgot-password">{t('auth.forgotPassword')}</Link>

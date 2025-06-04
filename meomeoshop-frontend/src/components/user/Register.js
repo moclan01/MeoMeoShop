@@ -139,9 +139,9 @@ function Register() {
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
 
-          <button type="submit" className="auth-button">{t('Register')}</button>
+          <button type="submit" className="auth-button">{t('common.register')}</button>
         </form>
-        <Link to="/login" className="auth-link">{t('auth.noAccount')} <Link to="/login">{t('Login')}</Link></Link>
+        <Link to="/login" className="auth-link">{t('auth.noAccount')} <Link to="/login">{t('common.login')}</Link></Link>
       </div>
     </div>
   );

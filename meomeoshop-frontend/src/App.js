@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './i18n/i18n'; // Import i18n configuration
@@ -110,7 +110,7 @@ function App() {
             <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/reset-password/:token" element={<Suspense fallback={<div>Loading...</div>}><ResetPassword /></Suspense>} />
             <Route
               path="/checkout"
               element={<Order loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}

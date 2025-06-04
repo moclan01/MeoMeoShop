@@ -73,7 +73,7 @@ const ResetPassword = () => {
             />
           </div>
           <button type="submit" className="auth-button">
-            {t('auth.resetPassword')}
+            {t('auth.confirmResetPasswordButton')}
           </button>
         </form>
       </div>
