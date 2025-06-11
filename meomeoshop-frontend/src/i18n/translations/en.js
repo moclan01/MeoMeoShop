@@ -107,6 +107,9 @@ export const enTranslations = {
   checkout: {
     shippingInfo: 'Shipping Information',
     paymentMethod: 'Payment Method',
+    cod: 'Cash On Delivery',
+    paypal: 'PayPal',
+    payWithPayPal: 'Pay with PayPal',
     orderSummary: 'Order Summary',
     placeOrder: 'Place Order',
     fullName: 'Full Name',
@@ -121,6 +124,16 @@ export const enTranslations = {
     loading: 'Loading...',
     error: 'Error loading cart information',
     loginRequired: 'Please login to checkout'
+  },
+  paypalReturn: {
+    title: 'PayPal Payment Status',
+    pending: 'Confirming PayPal payment...',
+    success: 'PayPal payment successful!',
+    failed: 'PayPal payment failed',
+    error: 'An error occurred during PayPal payment',
+    errorExecuting: 'Failed to execute PayPal payment',
+    invalidParams: 'Invalid PayPal return parameters',
+    continueShopping: 'Continue Shopping'
   },
   orderSuccess: {
     title: 'Order Placed Successfully!',

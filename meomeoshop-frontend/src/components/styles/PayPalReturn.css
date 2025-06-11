@@ -1,0 +1,68 @@
+.paypal-return-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: #f0f2f5;
+  font-family: 'Arial', sans-serif;
+}
+
+.paypal-return-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.paypal-return-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.paypal-return-container p {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.paypal-return-container .success-icon,
+.paypal-return-container .failed-icon,
+.paypal-return-container .pending-icon,
+.paypal-return-container .error-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.paypal-return-container.success .success-icon {
+  color: #28a745;
+}
+
+.paypal-return-container.failed .failed-icon {
+  color: #dc3545;
+}
+
+.paypal-return-container.pending .pending-icon {
+  color: #ffc107;
+}
+
+.paypal-return-container.error .error-icon {
+  color: #6c757d;
+}
+
+.paypal-return-container button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.paypal-return-container button:hover {
+  background-color: #0056b3;
+} 

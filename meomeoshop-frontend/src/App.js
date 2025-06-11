@@ -34,6 +34,7 @@ import AddCategory from './components/admin/CRUD/AddCategory';
 import EditCategory from './components/admin/CRUD/UpdateCategory';
 import AddProduct from './components/admin/CRUD/AddProduct';
 import EditProduct from './components/admin/CRUD/UpdateProduct';
+import PayPalReturn from './components/user/PayPalReturn';
 
 function App() {
   // State for logged-in user, initialized from localStorage
@@ -121,6 +122,9 @@ function App() {
 
             {/* New Contact Route */}
             <Route path="/contact" element={<Contact />} />
+
+            {/* PayPal Return Route */}
+            <Route path="/paypal-return" element={<PayPalReturn loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />} />
 
             {/* Admin Routes - Protected by PrivateRoute */}
             <Route

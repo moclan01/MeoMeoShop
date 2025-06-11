@@ -14,6 +14,7 @@ function Order({ loggedInUser, updateCartInUserState }) {
     phone: '',
     note: ''
   });
+  const [paymentMethod, setPaymentMethod] = useState('cod'); // 'cod' or 'paypal'
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -97,7 +98,33 @@ function Order({ loggedInUser, updateCartInUserState }) {
       }
 
       const orderData = await orderResponse.json();
-      
+
+      if (paymentMethod === 'paypal') {
+        // Tạo thanh toán PayPal
+        const paypalResponse = await fetch('http://localhost:8080/api/paypal/create-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            total: calculateTotal(),
+            currency: 'USD',
+            description: `Order ${orderData.orderId}`,
+            orderId: orderData.orderId
+          }),
+        });
+
+        if (!paypalResponse.ok) {
+          throw new Error('Không thể tạo thanh toán PayPal');
+        }
+
+        const paypalData = await paypalResponse.json();
+        // Chuyển hướng đến trang chấp thuận PayPal
+        window.location.href = paypalData.approvalUrl;
+        return;
+      }
+
+      // Nếu thanh toán COD, tiếp tục xử lý như cũ
       // Clear cart after successful order
       const clearCartResponse = await fetch(`http://localhost:8080/api/carts/${loggedInUser.cart.cartId}/clear`, {
         method: 'POST'
@@ -172,8 +199,34 @@ function Order({ loggedInUser, updateCartInUserState }) {
                 />
               </div>
 
+              <div className="form-group">
+                <label>{t('checkout.paymentMethod')}:</label>
+                <div className="payment-methods">
+                  <label className="payment-method">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cod"
+                      checked={paymentMethod === 'cod'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    {t('checkout.cod')}
+                  </label>
+                  <label className="payment-method">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="paypal"
+                      checked={paymentMethod === 'paypal'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    {t('checkout.paypal')}
+                  </label>
+                </div>
+              </div>
+
               <button type="submit" className="submit-order">
-                {t('checkout.placeOrder')}
+                {paymentMethod === 'paypal' ? t('checkout.payWithPayPal') : t('checkout.placeOrder')}
               </button>
             </form>
           </div>

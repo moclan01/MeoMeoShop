@@ -107,6 +107,9 @@ export const viTranslations = {
   checkout: {
     shippingInfo: 'Thông tin giao hàng',
     paymentMethod: 'Phương thức thanh toán',
+    cod: 'Thanh toán khi nhận hàng',
+    paypal: 'PayPal',
+    payWithPayPal: 'Thanh toán bằng PayPal',
     orderSummary: 'Tóm tắt đơn hàng',
     placeOrder: 'Đặt hàng',
     fullName: 'Họ và tên',
@@ -121,6 +124,16 @@ export const viTranslations = {
     loading: 'Đang tải...',
     error: 'Có lỗi xảy ra khi tải thông tin giỏ hàng',
     loginRequired: 'Vui lòng đăng nhập để thanh toán'
+  },
+  paypalReturn: {
+    title: 'Trạng thái thanh toán PayPal',
+    pending: 'Đang xác nhận thanh toán PayPal...',
+    success: 'Thanh toán PayPal thành công!',
+    failed: 'Thanh toán PayPal thất bại',
+    error: 'Đã xảy ra lỗi trong quá trình thanh toán PayPal',
+    errorExecuting: 'Thực hiện thanh toán PayPal thất bại',
+    invalidParams: 'Thông số trả về PayPal không hợp lệ',
+    continueShopping: 'Tiếp tục mua sắm'
   },
   orderSuccess: {
     title: 'Đặt hàng thành công!',
