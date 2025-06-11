@@ -5,6 +5,7 @@ import com.example.meo_meo_shop.dto.OrderItemDTO.ProductSimpleDTO;
 import com.example.meo_meo_shop.entity.OrderItem;
 import com.example.meo_meo_shop.entity.Product;
 import com.example.meo_meo_shop.service.OrderItemServiceImpl;
+import com.example.meo_meo_shop.service.ProductServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/order-items")
 public class OrderItemController {
     private final OrderItemServiceImpl orderItemService;
+    private final ProductServiceImpl productService;
 
-    public OrderItemController(OrderItemServiceImpl orderItemService) {
+    public OrderItemController(OrderItemServiceImpl orderItemService, ProductServiceImpl productService) {
         this.orderItemService = orderItemService;
+        this.productService = productService;
     }
 
     @GetMapping
@@ -40,9 +43,25 @@ public class OrderItemController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderItemDTO> createOrderItem(@RequestBody OrderItem orderItem) {
-        OrderItem createdOrderItem = orderItemService.create(orderItem);
-        return new ResponseEntity<>(convertToDTO(createdOrderItem), HttpStatus.CREATED);
+    public ResponseEntity<OrderItemDTO> createOrderItem(@RequestBody OrderItemDTO orderItemDTO) {
+        try {
+            // Get product
+            Product product = productService.getById(orderItemDTO.getProduct().getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            // Create order item
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setQuantity(orderItemDTO.getQuantity());
+            orderItem.setPricePerUnit(product.getPrice());
+            orderItem.setOrder(orderItemService.getOrderService().getById(orderItemDTO.getOrder().getOrderId())
+                    .orElseThrow(() -> new RuntimeException("Order not found")));
+
+            OrderItem createdOrderItem = orderItemService.create(orderItem);
+            return new ResponseEntity<>(convertToDTO(createdOrderItem), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -74,6 +93,13 @@ public class OrderItemController {
             productDTO.setImageUrl(orderItem.getProduct().getImageUrl());
             productDTO.setPrice(orderItem.getProduct().getPrice());
             dto.setProduct(productDTO);
+        }
+
+        // Populate the order field in OrderItemDTO
+        if (orderItem.getOrder() != null) {
+            OrderItemDTO.OrderSimpleDTO orderDTO = new OrderItemDTO.OrderSimpleDTO();
+            orderDTO.setOrderId(orderItem.getOrder().getOrderId());
+            dto.setOrder(orderDTO);
         }
 
         return dto;

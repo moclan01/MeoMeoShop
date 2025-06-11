@@ -8,6 +8,7 @@ public class OrderItemDTO {
     private ProductSimpleDTO product;
     private int quantity;
     private double pricePerUnit;
+    private OrderSimpleDTO order;
 
     @Data
     public static class ProductSimpleDTO {
@@ -15,5 +16,10 @@ public class OrderItemDTO {
         private String name;
         private String imageUrl;
         private double price;
+    }
+
+    @Data
+    public static class OrderSimpleDTO {
+        private Long orderId;
     }
 } 

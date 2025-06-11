@@ -8,6 +8,7 @@ import java.util.Set;
 @Data
 public class OrderDTO {
     private Long orderId;
+    private String paypalOrderId;
     private UserSimpleDTO user;
     private LocalDate orderDate;
     private double totalAmount;

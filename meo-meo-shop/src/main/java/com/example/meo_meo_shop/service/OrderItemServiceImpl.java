@@ -7,10 +7,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderItemServiceImpl extends AServiceImpl<OrderItem, Long> implements IService<OrderItem, Long>{
     private final OrderItemRepository orderItemRepository;
+    private final OrderServiceImpl orderService;
 
-    public OrderItemServiceImpl(OrderItemRepository orderItemRepository) {
+    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, OrderServiceImpl orderService) {
         super(orderItemRepository);
         this.orderItemRepository = orderItemRepository;
+        this.orderService = orderService;
+    }
+
+    public OrderServiceImpl getOrderService() {
+        return orderService;
     }
 
     @Override

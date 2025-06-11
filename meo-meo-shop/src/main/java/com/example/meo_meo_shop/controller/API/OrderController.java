@@ -58,10 +58,7 @@ public class OrderController {
             Order order = new Order();
             order.setUser(user);
             order.setOrderDate(orderDTO.getOrderDate());
-            order.setTotalAmount(orderDTO.getTotalAmount());
-            order.setStatus(orderDTO.getStatus());
-            order.setShippingAddress(orderDTO.getShippingAddress());
-            order.setPhone(orderDTO.getPhone());
+            // totalAmount will be calculated after order items are populated
 
             // Create order items
             java.util.List<OrderItem> orderItems = orderDTO.getOrderItems().stream()
@@ -73,10 +70,20 @@ public class OrderController {
                         orderItem.setOrder(order);
                         orderItem.setProduct(product);
                         orderItem.setQuantity(itemDTO.getQuantity());
-                        orderItem.setPricePerUnit(itemDTO.getPricePerUnit());
+                        orderItem.setPricePerUnit(product.getPrice());
                         return orderItem;
                     })
                     .collect(Collectors.toList());
+
+            // Now calculate totalAmount from the correctly populated orderItems list
+            double calculatedTotalAmount = orderItems.stream()
+                    .mapToDouble(item -> item.getQuantity() * item.getPricePerUnit())
+                    .sum();
+            order.setTotalAmount(calculatedTotalAmount);
+
+            order.setStatus(orderDTO.getStatus());
+            order.setShippingAddress(orderDTO.getShippingAddress());
+            order.setPhone(orderDTO.getPhone());
 
             order.setOrderItems(new java.util.HashSet<>(orderItems));
             Order createdOrder = orderService.create(order);
