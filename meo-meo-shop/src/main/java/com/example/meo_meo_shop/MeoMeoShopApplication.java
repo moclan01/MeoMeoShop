@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.example.meo_meo_shop")
+//@ComponentScan(basePackages = "com.example.meo_meo_shop")
 public class MeoMeoShopApplication {
 
 	public static void main(String[] args) {

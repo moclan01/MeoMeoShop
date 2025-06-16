@@ -1,8 +1,10 @@
 package com.example.meo_meo_shop.controller.API;
 
+import com.example.meo_meo_shop.dto.ImageUploadDTO;
 import com.example.meo_meo_shop.dto.ProductDTO;
 import com.example.meo_meo_shop.entity.Product;
 import com.example.meo_meo_shop.service.ProductServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +86,18 @@ public class ProductController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/image")
+    public ResponseEntity<ProductDTO> uploadProductImage(@PathVariable Long id, @Valid @RequestBody ImageUploadDTO imageDTO) {
+        try {
+            Product updatedProduct = productService.saveBase64Image(id, imageDTO.getBase64Image());
+            return new ResponseEntity<>(convertToDTO(updatedProduct), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private ProductDTO convertToDTO(Product product) {
