@@ -240,7 +240,7 @@ const HomePage = ({ loggedInUser, updateCartInUserState }) => {
               {currentProducts.map(product => (
                 <div key={product.productId} className="product-item">
                   <Link to={`/products/${product.productId}`} className="product-item-link"> 
-                    <img src={product.imageUrl} alt={product.name} />
+                    <img src={'http://localhost:8080' + product.imageUrl} alt={product.name} />
                     <h3>{product.name}</h3>
                     <p>{product.price ? product.price.toLocaleString('vi-VN') + 'đ' : 'N/A'}</p> 
                   </Link>

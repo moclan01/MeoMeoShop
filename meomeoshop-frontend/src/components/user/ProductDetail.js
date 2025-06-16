@@ -80,7 +80,7 @@ const ProductDetail = ({ loggedInUser, updateCartInUserState }) => {
   return (
     <div className="product-detail-container">
       <div className="product-image">
-        <img src={product.imageUrl} alt={product.name} onError={(e) => { e.target.onerror = null; e.target.src="/path/to/placeholder-image.png" }}/>
+        <img src={'http://localhost:8080' + product.imageUrl} alt={product.name} onError={(e) => { e.target.onerror = null; e.target.src="/path/to/placeholder-image.png" }}/>
       </div>
       <div className="product-info">
         <h1>{product.name}</h1>

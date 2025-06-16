@@ -15,6 +15,54 @@ function Register() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate name
+    if (!name.trim()) {
+      newErrors.name = t('validation.nameRequired');
+    } else if (name.trim().length < 2) {
+      newErrors.name = t('validation.nameMinLength');
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      newErrors.email = t('validation.emailRequired');
+    } else if (!emailRegex.test(email.trim())) {
+      newErrors.email = t('validation.emailInvalid');
+    }
+
+    // Validate phone (optional, but must be valid if provided)
+    const phoneRegex = /^\+?\d{10,11}$/;
+    if (phone.trim() && !phoneRegex.test(phone.trim())) {
+      newErrors.phone = t('validation.phoneInvalid');
+    }
+
+    // Validate address (optional, but must be valid if provided)
+    if (address.trim() && address.trim().length < 5) {
+      newErrors.address = t('validation.addressMinLength');
+    }
+
+    // Validate password
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!password) {
+      newErrors.password = t('validation.passwordRequired');
+    } else if (!passwordRegex.test(password)) {
+      newErrors.password = t('validation.passwordInvalid');
+    }
+
+    // Validate confirmPassword
+    if (!confirmPassword) {
+      newErrors.confirmPassword = t('validation.confirmPasswordRequired');
+    } else if (confirmPassword !== password) {
+      newErrors.confirmPassword = t('validation.confirmPasswordMatchError');
+    }
+
+    setError(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setError('');

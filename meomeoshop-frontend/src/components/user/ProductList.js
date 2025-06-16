@@ -3,17 +3,6 @@ import { Link } from 'react-router-dom';
 import '../styles/ProductList.css';
 
 function ProductList() {
-  // Mock data for now, including category and brand
-  const products = [
-    { id: 1, name: 'Thức Ăn Hạt Pedigree Dành Cho Chó Trưởng Thành - Vị Bò Nướng', price: 45000, priceDisplay: '45.000vnđ', imageUrl: '/path/to/product1.jpg', category: 'Thức ăn hạt', brand: 'Pedigree' },
-    { id: 2, name: 'Thức Ăn Hạt Me-o Kitten Ocean Fish - 400g', price: 50000, priceDisplay: '50.000vnđ', imageUrl: '/path/to/product2.jpg', category: 'Thức ăn hạt', brand: 'Me-o' },
-    { id: 3, name: 'Thức Ăn Hạt Pedigree Vị Trứng Sữa - Chó Con', price: 215000, priceDisplay: '215.000vnđ', imageUrl: '/path/to/product3.jpg', category: 'Thức ăn hạt', brand: 'Pedigree' },
-    { id: 4, name: 'Bánh Xương Dentastix Pedigree Cho Chó Trung (98g)', price: 40000, priceDisplay: '40.000vnđ', imageUrl: '/path/to/product4.jpg', category: 'Bánh thưởng', brand: 'Pedastix' },
-    { id: 5, name: 'Pate Cho Mèo Lớn Whiskas Vị Cá Thu', price: 20000, priceDisplay: '20.000vnđ', imageUrl: '/path/to/product5.jpg', category: 'PATE', brand: 'Whiskas' },
-    { id: 6, name: 'Đồ Chơi Chuột Vờn Cho Mèo', price: 30000, priceDisplay: '30.000vnđ', imageUrl: '/path/to/product6.jpg', category: 'Đồ chơi', brand: 'PetToy' },
-    // Add more mock products here with category and brand
-  ];
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedBrand, setSelectedBrand] = useState('All');
@@ -85,9 +74,9 @@ function ProductList() {
       {/* Search and Filter area */}
       <div className="filter-sort-area">
         {/* Search input */}
-        <input 
-          type="text" 
-          placeholder="Tìm kiếm sản phẩm..." 
+        <input
+          type="text"
+          placeholder="Tìm kiếm sản phẩm..."
           value={searchTerm}
           onChange={handleSearchChange}
         />
@@ -107,17 +96,17 @@ function ProductList() {
         </select>
 
         {/* Price Filter (using input type text for simplicity, could be range slider) */}
-        <input 
-          type="number" 
-          placeholder="Giá từ" 
-          value={minPrice} 
-          onChange={handleMinPriceChange} 
+        <input
+          type="number"
+          placeholder="Giá từ"
+          value={minPrice}
+          onChange={handleMinPriceChange}
         />
-        <input 
-          type="number" 
-          placeholder="Giá đến" 
-          value={maxPrice} 
-          onChange={handleMaxPriceChange} 
+        <input
+          type="number"
+          placeholder="Giá đến"
+          value={maxPrice}
+          onChange={handleMaxPriceChange}
         />
 
         {/* Sort By */}
@@ -130,23 +119,27 @@ function ProductList() {
         </select>
 
       </div>
-      
+
       <div className="product-grid">
         {/* Render filtered products */}
         {filteredProducts.length === 0 ? (
           <p>Không tìm thấy sản phẩm nào phù hợp.</p>
         ) : (
-          filteredProducts.map(product => (
-            <Link key={product.id} to={`/products/${product.id}`} className="product-item-link">
-              <div className="product-item">
-                <img src={product.imageUrl} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p>{product.priceDisplay}</p>
-                {/* Add to cart button */}
-                <button>Thêm vào giỏ</button>
-              </div>
-            </Link>
-          ))
+          filteredProducts.map(product => {
+            console.log(product); // 👉 Bạn thêm dòng này để kiểm tra dữ liệu
+
+            return (
+              <Link key={product.id} to={`/products/${product.id}`} className="product-item-link">
+                <div className="product-item">
+                  <img src={'http://localhost:8080' + product.imageUrl} alt={product.name} />
+                  <h3>{product.name}</h3>
+                  <p>{product.priceDisplay}</p>
+                  <button>Thêm vào giỏ</button>
+                </div>
+              </Link>
+            );
+          })
+
         )}
       </div>
     </div>
