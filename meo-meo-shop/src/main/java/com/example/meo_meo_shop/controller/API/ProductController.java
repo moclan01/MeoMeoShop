@@ -8,7 +8,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,14 +91,16 @@ public class ProductController {
     }
 
     @PostMapping("/{id}/image")
-    public ResponseEntity<ProductDTO> uploadProductImage(@PathVariable Long id, @Valid @RequestBody ImageUploadDTO imageDTO) {
+    public ResponseEntity<?> uploadProductImage(@PathVariable Long id, @Valid @RequestBody ImageUploadDTO imageDTO) {
         try {
-            Product updatedProduct = productService.saveBase64Image(id, imageDTO.getBase64Image());
+            Product updatedProduct = productService.saveBase64Image(id, imageDTO.getBase64Image(), imageDTO.getFileName());
             return new ResponseEntity<>(convertToDTO(updatedProduct), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>("Product not found with ID: " + id, HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to save image: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
