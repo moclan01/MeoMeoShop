@@ -29,6 +29,9 @@ public class Order {
     private String shippingAddress;
     private String phone;
 
+    @Column(name = "payment_method", nullable = true)
+    private String paymentMethod;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems;
 

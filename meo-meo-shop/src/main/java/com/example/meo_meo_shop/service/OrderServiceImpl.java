@@ -38,6 +38,9 @@ public class OrderServiceImpl extends AServiceImpl<Order, Long> implements IServ
         if (updatedOrder.getUser() != null) {
             existing.setUser(updatedOrder.getUser());
         }
+        if (updatedOrder.getPaymentMethod() != null) {
+            existing.setPaymentMethod(updatedOrder.getPaymentMethod());
+        }
 
         return orderRepository.save(existing);
     }

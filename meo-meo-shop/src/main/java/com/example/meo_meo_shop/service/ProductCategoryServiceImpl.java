@@ -3,6 +3,7 @@ package com.example.meo_meo_shop.service;
 import com.example.meo_meo_shop.entity.ProductCategory;
 import com.example.meo_meo_shop.repository.ProductCategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,10 +38,26 @@ public class ProductCategoryServiceImpl extends AServiceImpl<ProductCategory, Lo
         return productCategoryRepository.findByCategory_CategoryId(categoryId);
     }
 
+    @Transactional
     public void deleteByProductId(Long productId) {
-        productCategoryRepository.deleteByProduct_ProductId(productId);
+        List<ProductCategory> list = productCategoryRepository.findByProduct_ProductId(productId);
+
+        if (list == null || list.isEmpty()) {
+            System.out.println("Không tìm thấy ProductCategory nào với productId = " + productId);
+            return;
+        }
+
+        try {
+            productCategoryRepository.deleteAll(list);
+            System.out.println("Đã xóa " + list.size() + " product-category mappings.");
+        } catch (Exception e) {
+            System.err.println("Lỗi khi xóa product-category mappings:");
+            e.printStackTrace();
+            throw e; // để controller bắt được lỗi đúng
+        }
     }
 
+    @Transactional
     public void deleteByCategoryId(Long categoryId) {
         productCategoryRepository.deleteByCategory_CategoryId(categoryId);
     }

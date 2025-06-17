@@ -65,12 +65,13 @@ public class OrderController {
                     .map(itemDTO -> {
                         Product product = productService.getById(itemDTO.getProduct().getProductId())
                                 .orElseThrow(() -> new RuntimeException("Product not found"));
-                        
+
                         OrderItem orderItem = new OrderItem();
                         orderItem.setOrder(order);
                         orderItem.setProduct(product);
                         orderItem.setQuantity(itemDTO.getQuantity());
                         orderItem.setPricePerUnit(product.getPrice());
+
                         return orderItem;
                     })
                     .collect(Collectors.toList());
@@ -84,7 +85,7 @@ public class OrderController {
             order.setStatus(orderDTO.getStatus());
             order.setShippingAddress(orderDTO.getShippingAddress());
             order.setPhone(orderDTO.getPhone());
-
+            order.setPaymentMethod(orderDTO.getPaymentMethod());
             order.setOrderItems(new java.util.HashSet<>(orderItems));
             Order createdOrder = orderService.create(order);
             return new ResponseEntity<>(convertToDTO(createdOrder), HttpStatus.CREATED);

@@ -15,6 +15,7 @@ public class OrderDTO {
     private String status;
     private String shippingAddress;
     private String phone;
+    private String paymentMethod;
     private List<OrderItemDTO> orderItems;
 
     @Data
