@@ -80,6 +80,24 @@ public class OrderItemController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<OrderItemDTO>> getOrderItemsByOrderId(@PathVariable Long orderId) {
+        try {
+            // Kiểm tra order có tồn tại
+            orderItemService.getOrderService().getById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
+
+            List<OrderItem> orderItems = orderItemService.getOrderItemsByOrderId(orderId);
+            List<OrderItemDTO> itemDTOs = orderItems.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(itemDTOs, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     private OrderItemDTO convertToDTO(OrderItem orderItem) {
         OrderItemDTO dto = new OrderItemDTO();
         dto.setOrderItemId(orderItem.getOrderItemId());

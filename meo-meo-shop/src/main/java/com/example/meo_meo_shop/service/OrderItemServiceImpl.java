@@ -4,6 +4,8 @@ import com.example.meo_meo_shop.entity.OrderItem;
 import com.example.meo_meo_shop.repository.OrderItemRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderItemServiceImpl extends AServiceImpl<OrderItem, Long> implements IService<OrderItem, Long>{
     private final OrderItemRepository orderItemRepository;
@@ -19,6 +21,9 @@ public class OrderItemServiceImpl extends AServiceImpl<OrderItem, Long> implemen
         return orderService;
     }
 
+    public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
+        return orderItemRepository.findByOrderOrderId(orderId);
+    }
     @Override
     public OrderItem update(Long id, OrderItem updatedOrderItem) {
         OrderItem existing = orderItemRepository.findById(id)
