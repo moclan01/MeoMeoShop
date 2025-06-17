@@ -109,6 +109,23 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderDTO>> getOrdersByUserId(@PathVariable String userId) {
+        try {
+            // Kiểm tra user có tồn tại
+            userService.getById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+            List<Order> orders = orderService.getOrdersByUserId(userId);
+            List<OrderDTO> orderDTOs = orders.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     private OrderDTO convertToDTO(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setOrderId(order.getOrderId());

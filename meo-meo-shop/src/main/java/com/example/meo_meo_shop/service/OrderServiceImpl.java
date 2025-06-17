@@ -4,6 +4,8 @@ import com.example.meo_meo_shop.entity.Order;
 import com.example.meo_meo_shop.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderServiceImpl extends AServiceImpl<Order, Long> implements IService<Order, Long>{
     private final OrderRepository orderRepository;
@@ -38,5 +40,9 @@ public class OrderServiceImpl extends AServiceImpl<Order, Long> implements IServ
         }
 
         return orderRepository.save(existing);
+    }
+
+    public List<Order> getOrdersByUserId(String userId) {
+        return orderRepository.findByUserUserId(userId);
     }
 }
