@@ -36,6 +36,9 @@ import AddProduct from './components/admin/CRUD/AddProduct';
 import EditProduct from './components/admin/CRUD/UpdateProduct';
 import PayPalReturn from './components/user/PayPalReturn';
 import OrderDetail from './components/user/OrderDetail';
+import AddOrder from './components/admin/CRUD/AddOrder';
+import UpdateOrder from './components/admin/CRUD/UpdateOrder';
+import AdminOrderDetail from './components/admin/AdminOrderDetail';
 
 function App() {
   // State for logged-in user, initialized from localStorage
@@ -143,6 +146,9 @@ function App() {
               <Route path="products/add" element={<AddProduct />} />
               <Route path="products/edit/:productId" element={<EditProduct />} />
               <Route path="orders" element={<AdminOrders />} />
+              <Route path="orders/add" element={<AddOrder />} />
+              <Route path="orders/edit/:id" element={<UpdateOrder />} />
+              <Route path="orders/detail/:id" element={<AdminOrderDetail />} />
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="categories" element={<AdminCategories />} />
               <Route path="categories/add" element={<AddCategory />} />

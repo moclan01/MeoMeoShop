@@ -10,8 +10,6 @@ function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const fetchOrders = useCallback(async () => {
@@ -52,9 +50,8 @@ function AdminOrders() {
     }
   };
 
-  const handleViewOrder = (order) => {
-    setSelectedOrder(order);
-    setIsModalOpen(true);
+  const handleViewOrder = (orderId) => {
+    navigate(`/admin/orders/detail/${orderId}`);
   };
 
   if (loading && !orders.length) return <LoadingSpinner />;
@@ -90,7 +87,7 @@ function AdminOrders() {
               <td>
                 <button
                   className="btn btn-info btn-sm me-1"
-                  onClick={() => handleViewOrder(order)}
+                  onClick={() => handleViewOrder(order.orderId)}
                   disabled={loading}
                 >
                   Chi tiết
@@ -115,11 +112,6 @@ function AdminOrders() {
         </tbody>
       </table>
 
-      <OrderDetailModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        order={selectedOrder}
-      />
     </div>
   );
 }
