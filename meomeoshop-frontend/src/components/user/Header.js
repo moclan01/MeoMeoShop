@@ -36,6 +36,11 @@ function Header({ cart, loggedInUser }) {
             <li>
               <Link to="/contact">{t("common.contact")}</Link>
             </li>
+            {loggedInUser && loggedInUser.role === 'admin' && (
+              <li>
+                <Link to="/admin">{t("common.admin")}</Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>

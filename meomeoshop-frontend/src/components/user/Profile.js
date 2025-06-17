@@ -29,6 +29,11 @@ function Profile({ onLogout }) {
     navigate('/'); // Điều hướng về trang chủ sau khi đăng xuất
   };
 
+  const handleViewOrdersClick = () => {
+    navigate('/user/orders'); // Điều hướng đến trang danh sách đơn hàng
+  };
+
+
   if (!user) {
     return <div className="profile-container">{t('profile.loading')}</div>;
   }
@@ -45,6 +50,9 @@ function Profile({ onLogout }) {
         <p><strong>{t('profile.role')}:</strong> {user.role}</p>
         {/* Có thể thêm nút sửa thông tin, đổi mật khẩu tại đây */}
       </div>
+      <button className="logout-button" onClick={handleViewOrdersClick}>
+          {t('profile.viewOrders')}
+        </button>
       {/* Nút đăng xuất */}
       <button className="logout-button" onClick={handleLogoutClick}>{t('profile.logout')}</button>
     </div>

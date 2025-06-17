@@ -4,6 +4,7 @@ import axiosInstance from '../../../service/axiosInstance';
 
 function AddProduct() {
   const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -43,6 +44,30 @@ function AddProduct() {
       }
     }
     setFormData(prev => ({ ...prev, selectedCategories: selected }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Kiểm tra định dạng ảnh
+      if (!file.type.startsWith('image/')) {
+        setError('Vui lòng chọn file ảnh (jpg, png, v.v.).');
+        return;
+      }
+      // Kiểm tra kích thước (ví dụ: < 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Kích thước ảnh không được vượt quá 5MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setFormData(prev => ({ ...prev, base64Image: base64String }));
+        setImagePreview(base64String); // Hiển thị preview
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -127,7 +152,7 @@ function AddProduct() {
           />
         </div>
 
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label className="form-label">URL Hình ảnh</label>
           <input
             type="text"
@@ -136,7 +161,27 @@ function AddProduct() {
             value={formData.imageUrl}
             onChange={handleChange}
           />
+        </div> */}
+        <div className="mb-3">
+          <label className="form-label">Hình ảnh</label>
+          <input
+            type="file"
+            className="form-control"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+          {imagePreview && (
+            <div className="mt-2">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="img-thumbnail"
+                style={{ maxWidth: '200px' }}
+              />
+            </div>
+          )}
         </div>
+
 
         <div className="mb-3">
           <label className="form-label">Danh mục</label>

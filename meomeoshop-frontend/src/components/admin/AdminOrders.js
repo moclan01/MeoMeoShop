@@ -13,6 +13,7 @@ function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
   const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
@@ -30,30 +31,30 @@ function AdminOrders() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const handleStatusChange = async (orderId, newStatus) => {
+  const handleAddOrder = () => {
+    navigate('/admin/orders/add');
+  };
+
+  const handleEditOrder = (orderId) => {
+    navigate(`/admin/orders/edit/${orderId}`);
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (!window.confirm('Bạn có chắc muốn xóa đơn hàng này?')) return;
     try {
       setLoading(true);
-      await axiosInstance.put(`/orders/${orderId}`, { status: newStatus });
-      setOrders(prevOrders =>
-        prevOrders.map(order =>
-          order.id === orderId ? { ...order, status: newStatus } : order
-        )
-      );
+      await axiosInstance.delete(`/orders/${orderId}`);
+      setOrders(prevOrders => prevOrders.filter(order => order.orderId !== orderId));
     } catch (err) {
-      setError('Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại sau.');
+      setError('Không thể xóa đơn hàng. Vui lòng thử lại sau.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleViewOrder = (orderId) => {
-    const order = orders.find(o => o.id === orderId);
+  const handleViewOrder = (order) => {
     setSelectedOrder(order);
     setIsModalOpen(true);
-  };
-
-  const handleAddOrder = () => {
-    navigate('/admin/categories/add');
   };
 
   if (loading && !orders.length) return <LoadingSpinner />;
@@ -63,7 +64,9 @@ function AdminOrders() {
     <div className="admin-orders-section">
       <h1>Quản lý Đơn hàng</h1>
       <div className="admin-orders-actions">
-        <button onClick={handleAddOrder}>Thêm Đơn hàng Mới</button>
+        <button className="btn btn-primary" onClick={handleAddOrder} disabled={loading}>
+          Thêm Đơn hàng Mới
+        </button>
       </div>
       <table className="admin-table">
         <thead>
@@ -78,15 +81,33 @@ function AdminOrders() {
         </thead>
         <tbody>
           {orders.map(order => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.customer}</td>
-              <td>{order.orderDate}</td>
-              <td>{order.total.toLocaleString('vi-VN')}đ</td>
+            <tr key={order.orderId}>
+              <td>{order.orderId}</td>
+              <td>{order.user.name}</td>
+              <td>{new Date(order.orderDate).toLocaleDateString('vi-VN')}</td>
+              <td>{order.totalAmount.toLocaleString('vi-VN')}đ</td>
               <td>{order.status}</td>
               <td>
-                <button className="edit" onClick={() => handleViewOrder(order.id)} disabled={loading}>
-                  Xem chi tiết
+                <button
+                  className="btn btn-info btn-sm me-1"
+                  onClick={() => handleViewOrder(order)}
+                  disabled={loading}
+                >
+                  Chi tiết
+                </button>
+                <button
+                  className="btn btn-warning btn-sm me-1"
+                  onClick={() => handleEditOrder(order.orderId)}
+                  disabled={loading}
+                >
+                  Sửa
+                </button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDeleteOrder(order.orderId)}
+                  disabled={loading}
+                >
+                  Xóa
                 </button>
               </td>
             </tr>

@@ -39,6 +39,17 @@ function AddCategory() {
           />
         </div>
 
+        <div className="mb-3">
+          <label className="form-label">Mô tả</label>
+          <textarea
+            className="form-control"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Nhập mô tả danh mục"
+            rows="4"
+          />
+        </div>
+
         <button type="submit" className="btn btn-primary">Thêm</button>
         <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate('/admin/categories')}>Hủy</button>
       </form>

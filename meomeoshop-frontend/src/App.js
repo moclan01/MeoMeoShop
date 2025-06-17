@@ -35,6 +35,7 @@ import EditCategory from './components/admin/CRUD/UpdateCategory';
 import AddProduct from './components/admin/CRUD/AddProduct';
 import EditProduct from './components/admin/CRUD/UpdateProduct';
 import PayPalReturn from './components/user/PayPalReturn';
+import OrderDetail from './components/user/OrderDetail';
 
 function App() {
   // State for logged-in user, initialized from localStorage
@@ -117,7 +118,8 @@ function App() {
               element={<Order loggedInUser={loggedInUser} updateCartInUserState={updateCartInUserState} />}
             />
             <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/orders" element={<Orders loggedInUser={loggedInUser} />} />
+            <Route path="/user/orders" element={<Orders loggedInUser={loggedInUser} />} />
+            <Route path="/user/orders/:orderId" element={<OrderDetail loggedInUser={loggedInUser} />} />
             <Route path="/profile" element={<Profile onLogout={handleLogout} />} />
 
             {/* New Contact Route */}

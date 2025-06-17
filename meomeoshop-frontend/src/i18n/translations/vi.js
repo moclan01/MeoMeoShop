@@ -12,7 +12,8 @@ export const viTranslations = {
     language: 'Ngôn ngữ',
     loading: 'Đang tải...',
     error: 'Đã xảy ra lỗi',
-    all: 'Tất cả'
+    all: 'Tất cả',
+    admin: 'Quản trị viên'
   },
   home: {
     welcome: 'Chào mừng đến với MeoMeoShop',
@@ -63,6 +64,7 @@ export const viTranslations = {
     registerSuccess: 'Đăng ký thành công!',
     loginError: 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.',
     noAccount: 'Chưa có tài khoản?',
+    haveAccount: "Bạn đã có tài khoản?",
     passwordsDoNotMatch: 'Mật khẩu xác nhận không khớp.',
     passwordResetSuccess: 'Mật khẩu của bạn đã được đặt lại thành công.',
     newPassword: 'Mật khẩu mới',
@@ -90,7 +92,7 @@ export const viTranslations = {
   cart: {
     empty: 'Giỏ hàng trống',
     total: 'Tổng cộng',
-    checkout: 'Thanh toán',
+    order: 'Đặt hàng',
     remove: 'Xóa',
     update: 'Cập nhật',
     title: 'Giỏ hàng',
@@ -111,7 +113,7 @@ export const viTranslations = {
     paypal: 'PayPal',
     payWithPayPal: 'Thanh toán bằng PayPal',
     orderSummary: 'Tóm tắt đơn hàng',
-    placeOrder: 'Đặt hàng',
+    placeOrder: 'Thanh toán',
     fullName: 'Họ và tên',
     email: 'Email',
     phone: 'Số điện thoại',
@@ -154,8 +156,22 @@ export const viTranslations = {
     submitSuccess: 'Tin nhắn của bạn đã được gửi!'
   },
   registerPage: {
-    title: 'Đăng ký tài khoản',
-    confirmPasswordMatchError: 'Mật khẩu xác nhận không khớp.'
+    title: "Đăng ký tài khoản",
+    nameRequired: "Vui lòng nhập họ và tên",
+    nameMinLength: "Họ và tên phải có ít nhất 2 ký tự",
+    emailRequired: "Vui lòng nhập email",
+    emailInvalid: "Email không hợp lệ",
+    emailExists: "Email đã tồn tại. Vui lòng sử dụng email khác.",
+    phoneInvalid: "Số điện thoại không hợp lệ (10-11 chữ số)",
+    addressMinLength: "Địa chỉ phải có ít nhất 5 ký tự",
+    passwordRequired: "Vui lòng nhập mật khẩu",
+    passwordInvalid: "Mật khẩu phải có ít nhất 8 ký tự, chứa chữ hoa, chữ thường, số và ký tự đặc biệt",
+    confirmPasswordRequired: "Vui lòng xác nhận mật khẩu",
+    confirmPasswordMatchError: "Mật khẩu xác nhận không khớp.",
+    invalidData: "Dữ liệu đăng ký không hợp lệ. Vui lòng kiểm tra lại.",
+    registerFailed: "Đăng ký thất bại: {{error}}",
+    registerSuccess: "Đăng ký thành công! Vui lòng đăng nhập.",
+    registerError: "Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau."
   },
   admin: {
     dashboard: 'Bảng điều khiển',
@@ -177,6 +193,29 @@ export const viTranslations = {
     role: 'Vai trò',
     notUpdated: 'Chưa cập nhật',
     logout: 'Đăng xuất',
-    loading: 'Đang tải thông tin người dùng hoặc bạn chưa đăng nhập.'
+    loading: 'Đang tải thông tin người dùng hoặc bạn chưa đăng nhập.',
+    viewOrders: 'Xem đơn hàng'
   },
+  orders: {
+    title: "Đơn hàng của tôi",
+    loading: "Đang tải...",
+    empty: "Bạn chưa có đơn hàng nào",
+    errorNotLoggedIn: "Vui lòng đăng nhập để xem đơn hàng",
+    errorFetchFailed: "Có lỗi xảy ra khi tải thông tin đơn hàng",
+    errorFetchOrderDetails: "Không thể tải chi tiết đơn hàng",
+    orderNotFound: "Không tìm thấy đơn hàng",
+    order: "Đơn hàng",
+    orderDate: "Ngày đặt",
+    status: "Trạng thái",
+    totalAmount: "Tổng tiền",
+    items: "Sản phẩm",
+    quantity: "Số lượng",
+    shippingAddress: "Địa chỉ giao hàng",
+    phone: "Số điện thoại",
+    notProvided: "Không có thông tin",
+    viewDetails: "Xem chi tiết",
+    backToList: "Quay lại danh sách",
+    login: "Đăng nhập",
+    continueShopping: "Tiếp tục mua sắm"
+  }
 }; 

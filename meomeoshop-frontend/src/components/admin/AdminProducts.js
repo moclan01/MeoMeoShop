@@ -92,7 +92,7 @@ function AdminProducts() {
                 <td>{product.productId}</td>
                 <td>
                   {product.imageUrl
-                    ? <img src={product.imageUrl} alt={product.name} style={{ width: 60, height: 60, objectFit: 'cover' }} />
+                    ? <img src={'http://localhost:8080' + product.imageUrl} alt={product.name} style={{ width: 60, height: 60, objectFit: 'cover' }} />
                     : 'No Image'}
                 </td>
                 <td>{product.name}</td>

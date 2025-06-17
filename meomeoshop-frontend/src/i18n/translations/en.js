@@ -12,7 +12,8 @@ export const enTranslations = {
     language: 'Language',
     loading: 'Loading...',
     error: 'An error occurred',
-    all: 'All'
+    all: 'All',
+    admin: 'Admin'
   },
   home: {
     welcome: 'Welcome to MeoMeoShop',
@@ -63,6 +64,7 @@ export const enTranslations = {
     registerSuccess: 'Registration successful!',
     loginError: 'Login failed. Please check your credentials.',
     noAccount: "Don't have an account?",
+    haveAccount: "Already have an account?",
     passwordsDoNotMatch: 'Passwords do not match.',
     passwordResetSuccess: 'Your password has been reset successfully. You will be redirected to the login page shortly.',
     newPassword: 'New Password',
@@ -90,6 +92,7 @@ export const enTranslations = {
   cart: {
     empty: 'Your cart is empty',
     total: 'Total',
+    order: 'Order',
     checkout: 'Checkout',
     remove: 'Remove',
     update: 'Update',
@@ -111,7 +114,7 @@ export const enTranslations = {
     paypal: 'PayPal',
     payWithPayPal: 'Pay with PayPal',
     orderSummary: 'Order Summary',
-    placeOrder: 'Place Order',
+    placeOrder: 'Checkout',
     fullName: 'Full Name',
     email: 'Email',
     phone: 'Phone Number',
@@ -154,8 +157,22 @@ export const enTranslations = {
     submitSuccess: 'Your message has been sent!'
   },
   registerPage: {
-    title: 'Register Account',
-    confirmPasswordMatchError: 'Confirm password does not match.'
+    title: "Register Account",
+    nameRequired: "Name is required",
+    nameMinLength: "Name must be at least 2 characters",
+    emailRequired: "Email is required",
+    emailInvalid: "Invalid email format",
+    emailExists: "Email already exists. Please use another email.",
+    phoneInvalid: "Invalid phone number (10-11 digits)",
+    addressMinLength: "Address must be at least 5 characters",
+    passwordRequired: "Password is required",
+    passwordInvalid: "Password must be at least 8 characters, contain uppercase, lowercase, number, and special character",
+    confirmPasswordRequired: "Please confirm password",
+    confirmPasswordMatchError: "Confirm password does not match.",
+    invalidData: "Invalid registration data. Please check again.",
+    registerFailed: "Registration failed: {{error}}",
+    registerSuccess: "Registration successful! Please login.",
+    registerError: "An error occurred during registration. Please try again later."
   },
   admin: {
     dashboard: 'Dashboard',
@@ -177,6 +194,29 @@ export const enTranslations = {
     role: 'Role',
     notUpdated: 'Not updated',
     logout: 'Logout',
-    loading: 'Loading user information or you are not logged in.'
+    loading: 'Loading user information or you are not logged in.',
+    viewOrders: 'View Orders'
   },
+  orders: {
+    title: "My Orders",
+    loading: "Loading...",
+    empty: "You have no orders yet",
+    errorNotLoggedIn: "Please log in to view orders",
+    errorFetchFailed: "An error occurred while fetching orders",
+    errorFetchOrderDetails: "Unable to fetch order details",
+    orderNotFound: "Order not found",
+    order: "Order",
+    orderDate: "Order Date",
+    status: "Status",
+    totalAmount: "Total Amount",
+    items: "Items",
+    quantity: "Quantity",
+    shippingAddress: "Shipping Address",
+    phone: "Phone",
+    notProvided: "Not provided",
+    viewDetails: "View Details",
+    backToList: "Back to List",
+    login: "Login",
+    continueShopping: "Continue Shopping"
+  }
 }; 

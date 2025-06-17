@@ -40,7 +40,7 @@ const ForgotPassword = () => {
     <div className="auth-container">
       <div className="auth-form-box">
         <h2>{t('auth.forgotPassword')}</h2>
-        {error && <div className="error-message">{error}</div>}
+        {/* {error && <div className="error-message">{error}</div>} */}
 
         {!emailSent ? (
           <form onSubmit={handleSubmit}>

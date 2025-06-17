@@ -152,7 +152,7 @@ function Cart({ loggedInUser, updateCartInUserState }) {
             <div key={item.cartItemId} className="cart-item">
               <div className="item-image">
                 {item.product && item.product.imageUrl ? (
-                  <img src={item.product.imageUrl} alt={item.product.name} />
+                  <img src={'http://localhost:8080' + item.product.imageUrl} alt={item.product.name} />
                 ) : (
                   <img src={require('../../assets/product.png')} alt={item.product.name} />
                 )}
@@ -191,7 +191,7 @@ function Cart({ loggedInUser, updateCartInUserState }) {
             <span>{t('cart.totalPrice')}:</span>
             <span>{totalPrice.toLocaleString('vi-VN')}đ</span>
           </div>
-          <button className="checkout-button" onClick={handleCheckoutClick}>{t('cart.checkout')}</button>
+          <button className="checkout-button" onClick={handleCheckoutClick}>{t('cart.order')}</button>
         </div>
       </div>
     </div>

@@ -237,7 +237,7 @@ function Order({ loggedInUser, updateCartInUserState }) {
               {cartItems.map(item => (
                 <div key={item.cartItemId} className="order-item">
                   <img 
-                    src={item.product.imageUrl || require('../../assets/product.png')} 
+                    src={'http://localhost:8080' +item.product.imageUrl || require('../../assets/product.png')} 
                     alt={item.product.name} 
                   />
                   <div className="item-details">
