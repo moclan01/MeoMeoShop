@@ -49,40 +49,22 @@ function AdminOrderDetail() {
   const total = subtotal + shippingFee;
 
   return (
-    <div className="admin-orders-section p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Chi tiết Đơn hàng #{order.orderId}</h1>
-        <button
-          className="btn btn-secondary"
-          onClick={() => navigate('/admin/orders')}
-        >
-          Quay lại
-        </button>
+    <div className="admin-orders-section">
+      <div className="admin-orders-actions">
+        <h1>Chi tiết Đơn hàng #{order.orderId}</h1>
+        <button onClick={() => navigate('/admin/orders')}>Quay lại</button>
       </div>
-      <div className="bg-white p-6 rounded-lg shadow">
-        <div className="space-y-4">
-          <p>
-            <strong>Khách hàng:</strong> {order.user.name} ({order.user.email})
-          </p>
-          <p>
-            <strong>Ngày đặt hàng:</strong>{' '}
-            {new Date(order.orderDate).toLocaleDateString('vi-VN')}
-          </p>
-          <p>
-            <strong>Trạng thái:</strong> {order.status}
-          </p>
-          <p>
-            <strong>Phương thức thanh toán:</strong> {order.paymentMethod || 'Chưa chọn'}
-          </p>
-          <p>
-            <strong>Địa chỉ giao hàng:</strong> {order.shippingAddress}
-          </p>
-          <p>
-            <strong>Số điện thoại:</strong> {order.phone}
-          </p>
-        </div>
-        <h3 className="text-lg font-semibold mt-6">Sản phẩm</h3>
-        <table className="admin-table mt-4">
+
+      <div className="order-detail">
+        <p><strong>Khách hàng:</strong> {order.user.name} ({order.user.email})</p>
+        <p><strong>Ngày đặt hàng:</strong> {new Date(order.orderDate).toLocaleDateString('vi-VN')}</p>
+        <p><strong>Trạng thái:</strong> {order.status}</p>
+        <p><strong>Phương thức thanh toán:</strong> {order.paymentMethod || 'Chưa chọn'}</p>
+        <p><strong>Địa chỉ giao hàng:</strong> {order.shippingAddress}</p>
+        <p><strong>Số điện thoại:</strong> {order.phone}</p>
+
+        <h3>Sản phẩm</h3>
+        <table className="admin-table">
           <thead>
             <tr>
               <th>Sản phẩm</th>
@@ -102,17 +84,11 @@ function AdminOrderDetail() {
             ))}
           </tbody>
         </table>
-        <div className="space-y-2 mt-6">
-          <p>
-            <strong>Tạm tính:</strong> {subtotal.toLocaleString('vi-VN')}đ
-          </p>
-          <p>
-            <strong>Phí giao hàng:</strong> {shippingFee.toLocaleString('vi-VN')}đ
-          </p>
-          <p>
-            <strong>Tổng cộng:</strong>{' '}
-            <span className="text-red-600 font-bold">{total.toLocaleString('vi-VN')}đ</span>
-          </p>
+
+        <div className="order-total">
+          <p><strong>Tạm tính:</strong> {subtotal.toLocaleString('vi-VN')}đ</p>
+          <p><strong>Phí giao hàng:</strong> {shippingFee.toLocaleString('vi-VN')}đ</p>
+          <p><strong>Tổng cộng:</strong> <span>{total.toLocaleString('vi-VN')}đ</span></p>
         </div>
       </div>
     </div>

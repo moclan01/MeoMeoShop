@@ -73,3 +73,87 @@
 .admin-orders-actions button:hover {
   background-color: #4cae4c;
 }
+
+.admin-orders-section h1 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Table styling */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.admin-table th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: 600;
+}
+
+.admin-table td {
+  background-color: #fff;
+  color: #555;
+}
+
+/* Order summary section */
+.order-summary {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.order-summary p {
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #444;
+}
+
+.order-summary .total {
+  color: #e63946;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* Back button */
+.admin-orders-section .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.admin-orders-section .btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .admin-orders-section h1 {
+    font-size: 20px;
+  }
+
+  .admin-orders-section .btn-secondary {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}

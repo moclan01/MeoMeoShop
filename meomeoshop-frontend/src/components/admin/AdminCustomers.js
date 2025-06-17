@@ -38,6 +38,21 @@ function AdminCustomers() {
     setIsModalOpen(true);
   };
 
+  const handleDeleteCustomer = async (userId) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa tài khoản này không?')) return;
+
+    try {
+      setLoading(true);
+      await axiosInstance.delete(`/users/${userId}`);
+      setCustomers(prev => prev.filter(c => c.userId !== userId)); // cập nhật danh sách sau khi xóa
+    } catch (err) {
+      console.error(err);
+      setError('Không thể xóa tài khoản. Vui lòng thử lại sau.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading && !customers.length) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} onRetry={fetchCustomers} />;
 
@@ -68,6 +83,14 @@ function AdminCustomers() {
               <td>
                 <button className="edit" onClick={() => handleViewCustomer(customer.userId)} disabled={loading}>
                   Xem chi tiết
+                </button>
+                <button
+                  className="delete"
+                  onClick={() => handleDeleteCustomer(customer.userId)}
+                  disabled={loading}
+                  style={{ marginLeft: '8px' }}
+                >
+                  Xóa
                 </button>
               </td>
             </tr>

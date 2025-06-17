@@ -10,8 +10,9 @@ function AddProduct() {
     description: '',
     price: '',
     stock: '',
-    imageUrl: '',
-    selectedCategories: []
+    selectedCategories: [],
+    base64Image: '',
+    fileName: '',
   });
 
   const [categories, setCategories] = useState([]);
@@ -63,8 +64,12 @@ function AddProduct() {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
-        setFormData(prev => ({ ...prev, base64Image: base64String }));
-        setImagePreview(base64String); // Hiển thị preview
+        setFormData((prev) => ({
+          ...prev,
+          base64Image: base64String,
+          fileName: file.name, // Store the original file name
+        }));
+        setImagePreview(base64String); // Show preview
       };
       reader.readAsDataURL(file);
     }
@@ -84,7 +89,15 @@ function AddProduct() {
 
       const productId = productRes.data.productId;
 
-      // 2. Gửi từng ProductCategory
+      // 2. Upload the image if selected
+      if (formData.base64Image) {
+        await axiosInstance.post(`/products/${productId}/image`, {
+          base64Image: formData.base64Image,
+          fileName: formData.fileName,
+        });
+      }
+
+      // 3. Gửi từng ProductCategory
       for (const catId of formData.selectedCategories) {
         await axiosInstance.post('/product-categories', {
           product: { productId: productId },
@@ -152,16 +165,6 @@ function AddProduct() {
           />
         </div>
 
-        {/* <div className="mb-3">
-          <label className="form-label">URL Hình ảnh</label>
-          <input
-            type="text"
-            className="form-control"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-          />
-        </div> */}
         <div className="mb-3">
           <label className="form-label">Hình ảnh</label>
           <input
@@ -181,7 +184,6 @@ function AddProduct() {
             </div>
           )}
         </div>
-
 
         <div className="mb-3">
           <label className="form-label">Danh mục</label>

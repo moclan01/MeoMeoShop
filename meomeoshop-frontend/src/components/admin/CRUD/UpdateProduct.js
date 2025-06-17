@@ -12,6 +12,7 @@ function EditProduct() {
     price: '',
     stock: '',
     imageUrl: '',
+    base64Image: '',
     selectedCategories: []
   });
 
@@ -37,14 +38,19 @@ function EditProduct() {
       const res = await axiosInstance.get(`/products/${productId}`);
       const product = res.data;
 
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         name: product.name,
         description: product.description,
         price: product.price,
         stock: product.stock,
         imageUrl: product.imageUrl || '',
         selectedCategories: product.categories?.map(c => c.categoryId) || []
-      });
+      }));
+
+      if (product.imageUrl) {
+        setImagePreview('http://localhost:8080' +product.imageUrl);
+      }
     } catch (err) {
       setError('Không thể tải thông tin sản phẩm.');
     }
@@ -59,15 +65,14 @@ function EditProduct() {
     const selected = Array.from(e.target.selectedOptions, option => parseInt(option.value));
     setFormData(prev => ({ ...prev, selectedCategories: selected }));
   };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Kiểm tra định dạng ảnh
       if (!file.type.startsWith('image/')) {
         setError('Vui lòng chọn file ảnh (jpg, png, v.v.).');
         return;
       }
-      // Kiểm tra kích thước (ví dụ: < 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError('Kích thước ảnh không được vượt quá 5MB.');
         return;
@@ -77,29 +82,41 @@ function EditProduct() {
       reader.onloadend = () => {
         const base64String = reader.result;
         setFormData(prev => ({ ...prev, base64Image: base64String }));
-        setImagePreview(base64String); // Hiển thị preview
+        setImagePreview(base64String);
       };
       reader.readAsDataURL(file);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Cập nhật thông tin sản phẩm
       await axiosInstance.put(`/products/${productId}`, {
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price),
-        stock: parseInt(formData.stock),
-        imageUrl: formData.imageUrl
+        stock: parseInt(formData.stock)
       });
+
+      // Nếu có ảnh mới thì upload ảnh riêng
+      if (formData.base64Image) {
+        await axiosInstance.post(`/products/${productId}/image`, {
+          base64Image: formData.base64Image,
+          fileName: `product_${productId}`
+        });
+      }
 
       await axiosInstance.delete(`/product-categories/by-product/${productId}`);
 
-      for (const catId of formData.selectedCategories) {
-        await axiosInstance.post('/product-categories', {
-          product: { productId: parseInt(productId) },
-          category: { categoryId: catId }
-        });
+      // Cập nhật danh mục
+      if (formData.selectedCategories && formData.selectedCategories.length > 0) {
+        for (const catId of formData.selectedCategories) {
+          await axiosInstance.post('/product-categories', {
+            product: { productId: parseInt(productId) },
+            category: { categoryId: catId }
+          });
+        }
       }
 
       navigate('/admin/products');
@@ -162,16 +179,6 @@ function EditProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">URL Hình ảnh</label>
-          <input
-            type="text"
-            className="form-control"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-          />
-        </div>
-        {/* <div className="mb-3">
           <label className="form-label">Hình ảnh</label>
           <input
             type="file"
@@ -189,7 +196,7 @@ function EditProduct() {
               />
             </div>
           )}
-        </div> */}
+        </div>
 
         <div className="mb-3">
           <label className="form-label">Danh mục</label>
