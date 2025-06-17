@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/HomePage.css'; // We will create this CSS file later
 import BannerImage from '../../assets/banner.png'; // Import your banner image
-// ProductImage is no longer strictly needed if using dynamic image URLs from API
-// import ProductImage from '../../assets/product.png'; // Import the common product image
 
 const HomePage = ({ loggedInUser, updateCartInUserState }) => {
   const [products, setProducts] = useState([]);

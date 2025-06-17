@@ -40,25 +40,40 @@ const ProductDetail = ({ loggedInUser, updateCartInUserState }) => {
       navigate('/login');
       return;
     }
-
+    const cartId = loggedInUser.cart.cartId;
+    const userId = loggedInUser.userId;
     try {
-      const response = await fetch('http://localhost:8080/api/cart-items', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      // Gửi request thêm sản phẩm vào giỏ hàng
+      const addResponse = await fetch(
+        `http://localhost:8080/api/cart-items?cartId=${cartId}&productId=${productId}&quantity=${quantity}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        }
+      );
+
+      if (!addResponse.ok) {
+        const errorText = await addResponse.text();
+        console.error('Add to cart failed response:', addResponse.status, errorText);
+        throw new Error(t('product.addToCartError'));
+      }
+
+      // Fetch lại toàn bộ thông tin giỏ hàng của user
+      const fetchCartResponse = await fetch(`http://localhost:8080/api/carts/by-user/${userId}`, {
         credentials: 'include',
-        body: JSON.stringify({
-          productId: product.id,
-          quantity: quantity,
-        }),
       });
 
-      if (response.ok) {
-        const updatedCart = await response.json();
-        updateCartInUserState(updatedCart);
-        alert(t('product.addToCartSuccess'));
+      if (!fetchCartResponse.ok) {
+        const errorText = await fetchCartResponse.text();
+        console.error('Failed to refetch cart after adding item:', fetchCartResponse.status, errorText);
+        throw new Error(t('cart.fetchError'));
       }
+
+      const updatedCartData = await fetchCartResponse.json();
+      updateCartInUserState(updatedCartData);
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert(t('product.addToCartError'));
@@ -80,7 +95,7 @@ const ProductDetail = ({ loggedInUser, updateCartInUserState }) => {
   return (
     <div className="product-detail-container">
       <div className="product-image">
-        <img src={'http://localhost:8080' + product.imageUrl} alt={product.name} onError={(e) => { e.target.onerror = null; e.target.src="/path/to/placeholder-image.png" }}/>
+        <img src={'http://localhost:8080' + product.imageUrl} alt={product.name} onError={(e) => { e.target.onerror = null; e.target.src = "/path/to/placeholder-image.png" }} />
       </div>
       <div className="product-info">
         <h1>{product.name}</h1>
