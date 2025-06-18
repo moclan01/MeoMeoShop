@@ -5,6 +5,7 @@ import CustomerDetailModal from './CustomerDetailModal';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
 import axiosInstance from '../../service/axiosInstance';
+import { useTranslation } from 'react-i18next';
 
 function AdminCustomers() {
   const [customers, setCustomers] = useState([]);
@@ -12,6 +13,7 @@ function AdminCustomers() {
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+   const { t } = useTranslation();
 
   const fetchCustomers = useCallback(async () => {
     try {
@@ -22,7 +24,7 @@ function AdminCustomers() {
       setCustomers(response.data || []);
     } catch (err) {
       console.error(err);
-      setError('Không thể tải danh sách khách hàng. Vui lòng thử lại sau.');
+      setError(t('adminCustomers.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -39,7 +41,7 @@ function AdminCustomers() {
   };
 
   const handleDeleteCustomer = async (userId) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa tài khoản này không?')) return;
+    if (!window.confirm(t('adminCustomers.confirmDelete'))) return; 
 
     try {
       setLoading(true);
@@ -47,7 +49,7 @@ function AdminCustomers() {
       setCustomers(prev => prev.filter(c => c.userId !== userId)); // cập nhật danh sách sau khi xóa
     } catch (err) {
       console.error(err);
-      setError('Không thể xóa tài khoản. Vui lòng thử lại sau.');
+     setError(t('adminCustomers.deleteError'));
     } finally {
       setLoading(false);
     }
@@ -58,17 +60,17 @@ function AdminCustomers() {
 
   return (
     <div className="admin-customers-section">
-      <h1>Quản lý Khách hàng</h1>
+      <h1>{t('adminCustomers.title')}</h1>
       <table className="admin-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Tên khách hàng</th>
-            <th>Email</th>
-            <th>Số điện thoại</th>
-            <th>Địa chỉ</th>
-            <th>Vai trò</th>
-            <th>Hành động</th>
+            <th>{t('adminCustomers.id')}</th>
+            <th>{t('adminCustomers.name')}</th>
+            <th>{t('adminCustomers.email')}</th>
+            <th>{t('adminCustomers.phone')}</th>
+            <th>{t('adminCustomers.address')}</th>
+            <th>{t('adminCustomers.role')}</th>
+            <th>{t('adminCustomers.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -82,7 +84,7 @@ function AdminCustomers() {
               <td>{customer.role}</td>
               <td>
                 <button className="edit" onClick={() => handleViewCustomer(customer.userId)} disabled={loading}>
-                  Xem chi tiết
+                  {t('adminCustomers.view')}
                 </button>
                 <button
                   className="delete"
@@ -90,7 +92,7 @@ function AdminCustomers() {
                   disabled={loading}
                   style={{ marginLeft: '8px' }}
                 >
-                  Xóa
+                  {t('adminCustomers.delete')}
                 </button>
               </td>
             </tr>

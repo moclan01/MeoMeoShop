@@ -5,6 +5,7 @@ import ErrorMessage from '../common/ErrorMessage';
 import DeleteConfirmModal from '../common/DeleteConfirmModal';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../service/axiosInstance';
+import { useTranslation } from 'react-i18next';
 
 function AdminCategories() {
   const [categories, setCategories] = useState([]);
@@ -14,6 +15,7 @@ function AdminCategories() {
   const [categoryToDeleteId, setCategoryToDeleteId] = useState(null);
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchCategories();
@@ -26,7 +28,7 @@ function AdminCategories() {
       const response = await axiosInstance.get('/categories');
       setCategories(response.data);
     } catch (err) {
-      setError('Không thể tải danh sách danh mục. Vui lòng thử lại sau.');
+      setError(t('adminCategories.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -54,7 +56,7 @@ function AdminCategories() {
       setCategoryToDeleteId(null);
       setIsDeleteModalOpen(false);
     } catch (err) {
-      setError('Không thể xóa danh mục. Vui lòng thử lại sau.');
+      setError(t('adminCategories.deleteError'));
     } finally {
       setLoading(false);
     }
@@ -72,17 +74,17 @@ function AdminCategories() {
 
   return (
     <div className="admin-categories-section">
-      <h1>Quản lý Danh mục</h1>
+      <h1>{t('adminCategories.title')}</h1>
       <div className="admin-categories-actions">
-        <button onClick={handleAddCategory}>Thêm Danh mục Mới</button>
+        <button onClick={handleAddCategory}>{t('adminCategories.add')}</button>
       </div>
 
       <table className="admin-table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Tên danh mục</th>
-            <th>Hành động</th>
+            <th>{t('adminCategories.name')}</th>
+            <th>{t('adminCategories.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -91,10 +93,11 @@ function AdminCategories() {
               <td>{category.categoryId}</td>
               <td>{category.name}</td>
               <td>
-                <button className="edit" onClick={() => { 
+                <button className="edit" onClick={() => {
                   console.log('Edit clicked for categoryId:', category.categoryId);
-                  handleEditCategory(category.categoryId) }}>Sửa</button>
-                <button className="delete" onClick={() => handleDeleteClick(category.categoryId)}>Xóa</button>
+                  handleEditCategory(category.categoryId)
+                }}>{t('adminCategories.edit')}</button>
+                <button className="delete" onClick={() => handleDeleteClick(category.categoryId)}>{t('adminCategories.delete')}</button>
               </td>
             </tr>
           ))}

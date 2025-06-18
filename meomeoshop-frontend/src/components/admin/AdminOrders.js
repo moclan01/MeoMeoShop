@@ -5,12 +5,14 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
 import axiosInstance from '../../service/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -19,7 +21,7 @@ function AdminOrders() {
       const response = await axiosInstance.get('/orders');
       setOrders(response.data);
     } catch (err) {
-      setError('Không thể tải danh sách đơn hàng. Vui lòng thử lại sau.');
+      setError(t('adminOrders.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -38,13 +40,13 @@ function AdminOrders() {
   };
 
   const handleDeleteOrder = async (orderId) => {
-    if (!window.confirm('Bạn có chắc muốn xóa đơn hàng này?')) return;
+    if (!window.confirm(t('adminOrders.confirmDelete'))) return;
     try {
       setLoading(true);
       await axiosInstance.delete(`/orders/${orderId}`);
       setOrders(prevOrders => prevOrders.filter(order => order.orderId !== orderId));
     } catch (err) {
-      setError('Không thể xóa đơn hàng. Vui lòng thử lại sau.');
+      setError(t('adminOrders.deleteError'));
     } finally {
       setLoading(false);
     }
@@ -59,21 +61,21 @@ function AdminOrders() {
 
   return (
     <div className="admin-orders-section">
-      <h1>Quản lý Đơn hàng</h1>
+      <h1>{t('adminOrders.title')}</h1>
       <div className="admin-orders-actions">
         <button className="btn btn-primary" onClick={handleAddOrder} disabled={loading}>
-          Thêm Đơn hàng Mới
+          {t('adminOrders.add')}
         </button>
       </div>
       <table className="admin-table">
         <thead>
           <tr>
-            <th>ID Đơn hàng</th>
-            <th>Khách hàng</th>
-            <th>Ngày đặt</th>
-            <th>Tổng tiền</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th>{t('adminOrders.id')}</th>
+            <th>{t('adminOrders.customer')}</th>
+            <th>{t('adminOrders.date')}</th>
+            <th>{t('adminOrders.total')}</th>
+            <th>{t('adminOrders.status')}</th>
+            <th>{t('adminOrders.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -90,21 +92,21 @@ function AdminOrders() {
                   onClick={() => handleViewOrder(order.orderId)}
                   disabled={loading}
                 >
-                  Chi tiết
+                  {t('adminOrders.view')}
                 </button>
                 <button
                   className="btn btn-warning btn-sm me-1"
                   onClick={() => handleEditOrder(order.orderId)}
                   disabled={loading}
                 >
-                  Sửa
+                  {t('adminOrders.edit')}
                 </button>
                 <button
                   className="btn btn-danger btn-sm"
                   onClick={() => handleDeleteOrder(order.orderId)}
                   disabled={loading}
                 >
-                  Xóa
+                  {t('adminOrders.delete')}
                 </button>
               </td>
             </tr>

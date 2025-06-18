@@ -4,6 +4,7 @@ import axiosInstance from '../../service/axiosInstance';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../common/ErrorMessage';
 import '../styles/AdminOrders.css';
+import { useTranslation } from 'react-i18next';
 
 function AdminOrderDetail() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ function AdminOrderDetail() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
 
   const fetchOrder = useCallback(async () => {
     try {
@@ -23,9 +25,9 @@ function AdminOrderDetail() {
     } catch (err) {
       console.error('Error fetching order:', err.response);
       if (err.response && err.response.status === 404) {
-        setError('Đơn hàng không tồn tại.');
+        setError(t('adminOrderDetail.notFound'));
       } else {
-        setError('Không thể tải chi tiết đơn hàng. Vui lòng thử lại sau.');
+        setError(t('adminOrderDetail.fetchError'));
       }
     } finally {
       setLoading(false);
@@ -45,32 +47,32 @@ function AdminOrderDetail() {
     (sum, item) => sum + item.quantity * item.pricePerUnit,
     0
   );
-  const shippingFee = 0; 
+  const shippingFee = 0;
   const total = subtotal + shippingFee;
 
   return (
     <div className="admin-orders-section">
       <div className="admin-orders-actions">
-        <h1>Chi tiết Đơn hàng #{order.orderId}</h1>
-        <button onClick={() => navigate('/admin/orders')}>Quay lại</button>
+        <h1>{t('adminOrderDetail.title')} #{order.orderId}</h1>
+        <button onClick={() => navigate('/admin/orders')}>{t('adminOrderDetail.back')}</button>
       </div>
 
       <div className="order-detail">
-        <p><strong>Khách hàng:</strong> {order.user.name} ({order.user.email})</p>
-        <p><strong>Ngày đặt hàng:</strong> {new Date(order.orderDate).toLocaleDateString('vi-VN')}</p>
-        <p><strong>Trạng thái:</strong> {order.status}</p>
-        <p><strong>Phương thức thanh toán:</strong> {order.paymentMethod || 'Chưa chọn'}</p>
-        <p><strong>Địa chỉ giao hàng:</strong> {order.shippingAddress}</p>
-        <p><strong>Số điện thoại:</strong> {order.phone}</p>
+        <p><strong>{t('adminOrderDetail.customer')}:</strong> {order.user.name} ({order.user.email})</p>
+        <p><strong>{t('adminOrderDetail.orderDate')}:</strong> {new Date(order.orderDate).toLocaleDateString('vi-VN')}</p>
+        <p><strong>{t('adminOrderDetail.status')}:</strong> {order.status}</p>
+        <p><strong>{t('adminOrderDetail.paymentMethod')}:</strong> {order.paymentMethod || t('adminOrderDetail.notSelected')}</p>
+        <p><strong>{t('adminOrderDetail.shippingAddress')}:</strong> {order.shippingAddress}</p>
+        <p><strong>{t('adminOrderDetail.phone')}:</strong> {order.phone}</p>
 
         <h3>Sản phẩm</h3>
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Sản phẩm</th>
-              <th>Số lượng</th>
-              <th>Giá</th>
-              <th>Tổng</th>
+              <th>{t('adminOrderDetail.product')}</th>
+              <th>{t('adminOrderDetail.quantity')}</th>
+              <th>{t('adminOrderDetail.price')}</th>
+              <th>{t('adminOrderDetail.total')}</th>
             </tr>
           </thead>
           <tbody>
@@ -86,9 +88,9 @@ function AdminOrderDetail() {
         </table>
 
         <div className="order-total">
-          <p><strong>Tạm tính:</strong> {subtotal.toLocaleString('vi-VN')}đ</p>
-          <p><strong>Phí giao hàng:</strong> {shippingFee.toLocaleString('vi-VN')}đ</p>
-          <p><strong>Tổng cộng:</strong> <span>{total.toLocaleString('vi-VN')}đ</span></p>
+          <p><strong>{t('adminOrderDetail.subtotal')}:</strong> {subtotal.toLocaleString('vi-VN')}đ</p>
+          <p><strong>{t('adminOrderDetail.shippingFee')}:</strong> {shippingFee.toLocaleString('vi-VN')}đ</p>
+          <p><strong>{t('adminOrderDetail.grandTotal')}:</strong> <span>{total.toLocaleString('vi-VN')}đ</span></p>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axiosInstance from '../../../service/axiosInstance';
-
+import { useTranslation } from 'react-i18next';
 
 function EditCategory() {
     const { categoryId } = useParams();
@@ -10,6 +10,7 @@ function EditCategory() {
     const [description, setDescription] = useState('');
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         async function fetchCategory() {
@@ -18,8 +19,8 @@ function EditCategory() {
                 setName(res.data.name);
                 setDescription(res.data.description || ''); // set mô tả
             } catch (err) {
-                console.error('Lỗi tải danh mục:', err.response || err.message || err);
-                setError('Không thể tải thông tin danh mục.');
+                console.error('Fetch error:', err.response || err.message || err);
+                setError('editCategory.fetchError');
             }
         }
 
@@ -29,7 +30,7 @@ function EditCategory() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!name.trim()) {
-            setError('Tên danh mục không được để trống.');
+            setError('editCategory.emptyNameError');
             return;
         }
 
@@ -37,39 +38,39 @@ function EditCategory() {
             await axiosInstance.put(`/categories/${categoryId}`, { name, description });
             navigate('/admin/categories');
         } catch (err) {
-            setError('Không thể cập nhật danh mục.');
+            setError('editCategory.updateError');
         }
     };
 
     return (
         <div className="container mt-4">
-            <h2>Chỉnh sửa Danh mục</h2>
+            <h2>{t('editCategory.title')}</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label className="form-label">Tên danh mục</label>
+                    <label className="form-label">{t('editCategory.nameLabel')}</label>
                     <input
                         type="text"
                         className="form-control"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Nhập tên danh mục"
+                        placeholder={t('editCategory.namePlaceholder')}
                     />
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">Mô tả</label>
+                    <label className="form-label">{t('editCategory.descriptionLabel')}</label>
                     <textarea
                         className="form-control"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Nhập mô tả danh mục"
+                        placeholder={t('editCategory.descriptionPlaceholder')}
                         rows={3}
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Cập nhật</button>
-                <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate('/admin/categories')}>Hủy</button>
+                <button type="submit" className="btn btn-primary">{t('editCategory.submit')}</button>
+                <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate('/admin/categories')}>{t('editCategory.cancel')}</button>
             </form>
         </div>
     );
