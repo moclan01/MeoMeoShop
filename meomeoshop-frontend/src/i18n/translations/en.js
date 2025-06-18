@@ -413,6 +413,38 @@ export const enTranslations = {
     emptyNameError: "Category name must not be empty.",
     fetchError: "Unable to fetch category details.",
     updateError: "Unable to update category."
+  },
+  addProduct: {
+    title: "Add New Product",
+    nameLabel: "Product Name",
+    descriptionLabel: "Description",
+    priceLabel: "Price",
+    stockLabel: "Stock Quantity",
+    imageLabel: "Image",
+    categoryLabel: "Category",
+    categoryHint: "Hold Ctrl (Windows) or Cmd (Mac) to select multiple categories.",
+    submit: "Add Product",
+    cancel: "Cancel",
+    fetchCategoryError: "Failed to load categories.",
+    imageTypeError: "Please select an image file (jpg, png, etc.).",
+    imageSizeError: "Image size must not exceed 5MB.",
+    createError: "Failed to add product. Please check and try again."
+  },
+  editProduct: {
+    title: "Edit Product",
+    nameLabel: "Product Name",
+    descriptionLabel: "Description",
+    priceLabel: "Price",
+    stockLabel: "Stock Quantity",
+    imageLabel: "Image",
+    categoryLabel: "Category",
+    categoryHint: "Hold Ctrl (Windows) or Cmd (Mac) to select multiple categories.",
+    submit: "Save Changes",
+    cancel: "Cancel",
+    fetchCategoryError: "Failed to load categories.",
+    fetchProductError: "Failed to load product information.",
+    imageTypeError: "Please select an image file (jpg, png, etc.).",
+    imageSizeError: "Image size must not exceed 5MB.",
+    updateError: "Failed to update product."
   }
-
 }; 

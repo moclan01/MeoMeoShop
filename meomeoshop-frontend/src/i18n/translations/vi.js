@@ -413,5 +413,38 @@ export const viTranslations = {
     emptyNameError: "Tên danh mục không được để trống.",
     fetchError: "Không thể tải thông tin danh mục.",
     updateError: "Không thể cập nhật danh mục."
+  },
+  addProduct: {
+    title: "Thêm Sản phẩm mới",
+    nameLabel: "Tên sản phẩm",
+    descriptionLabel: "Mô tả",
+    priceLabel: "Giá",
+    stockLabel: "Số lượng trong kho",
+    imageLabel: "Hình ảnh",
+    categoryLabel: "Danh mục",
+    categoryHint: "Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều danh mục.",
+    submit: "Thêm sản phẩm",
+    cancel: "Hủy",
+    fetchCategoryError: "Lỗi khi tải danh mục.",
+    imageTypeError: "Vui lòng chọn file ảnh (jpg, png, v.v.).",
+    imageSizeError: "Kích thước ảnh không được vượt quá 5MB.",
+    createError: "Không thể thêm sản phẩm. Vui lòng kiểm tra lại."
+  },
+  editProduct: {
+    title: "Chỉnh sửa sản phẩm",
+    nameLabel: "Tên sản phẩm",
+    descriptionLabel: "Mô tả",
+    priceLabel: "Giá",
+    stockLabel: "Số lượng trong kho",
+    imageLabel: "Hình ảnh",
+    categoryLabel: "Danh mục",
+    categoryHint: "Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều danh mục.",
+    submit: "Lưu thay đổi",
+    cancel: "Hủy",
+    fetchCategoryError: "Lỗi khi tải danh mục.",
+    fetchProductError: "Không thể tải thông tin sản phẩm.",
+    imageTypeError: "Vui lòng chọn file ảnh (jpg, png, v.v.).",
+    imageSizeError: "Kích thước ảnh không được vượt quá 5MB.",
+    updateError: "Không thể cập nhật sản phẩm."
   }
 }; 

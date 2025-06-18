@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../service/axiosInstance';
+import { useTranslation } from 'react-i18next';
 
 function AddProduct() {
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -27,7 +29,7 @@ function AddProduct() {
       const res = await axiosInstance.get('/categories');
       setCategories(res.data);
     } catch (err) {
-      setError('Lỗi khi tải danh mục.');
+      setError(t('addProduct.fetchCategoryError'));
     }
   };
 
@@ -52,12 +54,12 @@ function AddProduct() {
     if (file) {
       // Kiểm tra định dạng ảnh
       if (!file.type.startsWith('image/')) {
-        setError('Vui lòng chọn file ảnh (jpg, png, v.v.).');
+        setError(t('addProduct.imageTypeError'));
         return;
       }
       // Kiểm tra kích thước (ví dụ: < 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError('Kích thước ảnh không được vượt quá 5MB.');
+        setError(t('addProduct.imageSizeError'));
         return;
       }
 
@@ -108,18 +110,18 @@ function AddProduct() {
       // 3. Chuyển trang
       navigate('/admin/products');
     } catch (err) {
-      setError('Không thể thêm sản phẩm. Vui lòng kiểm tra lại.');
+      setError(t('addProduct.createError'));
       console.error(err);
     }
   };
 
   return (
     <div className="container mt-4">
-      <h2>Thêm Sản phẩm mới</h2>
+      <h2>{t('addProduct.title')}</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">Tên sản phẩm</label>
+          <label className="form-label">{t('addProduct.nameLabel')}</label>
           <input
             type="text"
             className="form-control"
@@ -131,7 +133,7 @@ function AddProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Mô tả</label>
+          <label className="form-label">{t('addProduct.descriptionLabel')}</label>
           <textarea
             className="form-control"
             name="description"
@@ -142,7 +144,7 @@ function AddProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Giá</label>
+          <label className="form-label">{t('addProduct.priceLabel')}</label>
           <input
             type="number"
             className="form-control"
@@ -154,7 +156,7 @@ function AddProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Số lượng trong kho</label>
+          <label className="form-label">{t('addProduct.stockLabel')}</label>
           <input
             type="number"
             className="form-control"
@@ -166,7 +168,7 @@ function AddProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Hình ảnh</label>
+          <label className="form-label">{t('addProduct.imageLabel')}</label>
           <input
             type="file"
             className="form-control"
@@ -186,7 +188,7 @@ function AddProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Danh mục</label>
+          <label className="form-label">{t('addProduct.categoryLabel')}</label>
           <select
             className="form-select"
             multiple
@@ -201,13 +203,13 @@ function AddProduct() {
             ))}
           </select>
           <div className="form-text">
-            Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều danh mục.
+            {t('addProduct.categoryHint')}
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">Thêm sản phẩm</button>
+        <button type="submit" className="btn btn-primary">{t('addProduct.submit')}</button>
         <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate('/admin/products')}>
-          Hủy
+          {t('addProduct.cancel')}
         </button>
       </form>
     </div>

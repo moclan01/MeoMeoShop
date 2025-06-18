@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../../service/axiosInstance';
+import { useTranslation } from 'react-i18next';
 
 function EditProduct() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -29,7 +31,7 @@ function EditProduct() {
       const res = await axiosInstance.get('/categories');
       setCategories(res.data);
     } catch (err) {
-      setError('Lỗi khi tải danh mục.');
+      setError(t('editProduct.fetchCategoryError'));
     }
   };
 
@@ -49,10 +51,10 @@ function EditProduct() {
       }));
 
       if (product.imageUrl) {
-        setImagePreview('http://localhost:8080' +product.imageUrl);
+        setImagePreview('http://localhost:8080' + product.imageUrl);
       }
     } catch (err) {
-      setError('Không thể tải thông tin sản phẩm.');
+      setError(t('editProduct.fetchProductError'));
     }
   };
 
@@ -70,11 +72,11 @@ function EditProduct() {
     const file = e.target.files[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        setError('Vui lòng chọn file ảnh (jpg, png, v.v.).');
+        setError(t('editProduct.imageTypeError'));
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        setError('Kích thước ảnh không được vượt quá 5MB.');
+        setError(t('editProduct.imageSizeError'));
         return;
       }
 
@@ -107,6 +109,7 @@ function EditProduct() {
         });
       }
 
+      // Xóa các danh mục hiện tại
       await axiosInstance.delete(`/product-categories/by-product/${productId}`);
 
       // Cập nhật danh mục
@@ -121,18 +124,18 @@ function EditProduct() {
 
       navigate('/admin/products');
     } catch (err) {
-      setError('Không thể cập nhật sản phẩm.');
+      setError(t('editProduct.updateError'));
       console.error(err);
     }
   };
 
   return (
     <div className="container mt-4">
-      <h2>Chỉnh sửa sản phẩm</h2>
+      <h2>{t('editProduct.title')}</h2>
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">Tên sản phẩm</label>
+          <label className="form-label">{t('editProduct.nameLabel')}</label>
           <input
             type="text"
             className="form-control"
@@ -144,7 +147,7 @@ function EditProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Mô tả</label>
+          <label className="form-label">{t('editProduct.descriptionLabel')}</label>
           <textarea
             className="form-control"
             name="description"
@@ -155,7 +158,7 @@ function EditProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Giá</label>
+          <label className="form-label">{t('editProduct.priceLabel')}</label>
           <input
             type="number"
             className="form-control"
@@ -167,7 +170,7 @@ function EditProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Số lượng trong kho</label>
+          <label className="form-label">{t('editProduct.stockLabel')}</label>
           <input
             type="number"
             className="form-control"
@@ -179,7 +182,7 @@ function EditProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Hình ảnh</label>
+          <label className="form-label">{t('editProduct.imageLabel')}</label>
           <input
             type="file"
             className="form-control"
@@ -199,7 +202,7 @@ function EditProduct() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Danh mục</label>
+          <label className="form-label">{t('editProduct.categoryLabel')}</label>
           <select
             className="form-select"
             multiple
@@ -213,11 +216,12 @@ function EditProduct() {
               </option>
             ))}
           </select>
+          <div className="form-text">{t('editProduct.categoryHint')}</div>
         </div>
 
-        <button type="submit" className="btn btn-primary">Lưu thay đổi</button>
+        <button type="submit" className="btn btn-primary">{t('editProduct.submit')}</button>
         <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate('/admin/products')}>
-          Hủy
+          {t('editProduct.cancel')}
         </button>
       </form>
     </div>
