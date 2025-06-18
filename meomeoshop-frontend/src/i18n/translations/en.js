@@ -218,5 +218,54 @@ export const enTranslations = {
     backToList: "Back to List",
     login: "Login",
     continueShopping: "Continue Shopping"
+  },
+  adminDashboard: {
+    title: "Admin Panel",
+    home: "Go to Home",
+    products: "Manage Products",
+    categories: "Manage Categories",
+    orders: "Manage Orders",
+    customers: "Manage Customers",
+    logout: "Logout"
+  },
+  dashboard: {
+    title: 'Dashboard Overview',
+    stats: {
+      revenue: {
+        title: 'Total Revenue',
+        desc: 'Up 15% compared to last month',
+      },
+      orders: {
+        title: 'Total Orders',
+        desc: 'Down 5% compared to last week',
+      },
+      users: {
+        title: 'Total Users',
+        desc: 'New users today: 120',
+      },
+      products: {
+        title: 'Total Products',
+        desc: 'Out-of-stock products: 15',
+      },
+    },
+    chartTitle: 'Monthly Revenue Chart',
+  },
+  adminProducts: {
+    title: 'Product Management',
+    add: 'Add New Product',
+    fetchError: 'Error while fetching products.',
+    deleteError: 'Unable to delete product. Please try again later.',
+    image: 'Image',
+    name: 'Product Name',
+    price: 'Price',
+    category: 'Category',
+    stock: 'Stock',
+    actions: 'Actions',
+    empty: 'No products available',
+    noImage: 'No Image',
+    noPrice: 'No Price',
+    noCategory: 'No Category',
+    edit: 'Edit',
+    delete: 'Delete'
   }
 }; 

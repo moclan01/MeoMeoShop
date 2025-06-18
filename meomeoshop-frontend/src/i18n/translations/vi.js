@@ -1,3 +1,5 @@
+import AdminDashboard from "../../components/admin/AdminDashboard";
+
 export const viTranslations = {
   common: {
     home: 'Trang chủ',
@@ -217,5 +219,54 @@ export const viTranslations = {
     backToList: "Quay lại danh sách",
     login: "Đăng nhập",
     continueShopping: "Tiếp tục mua sắm"
-  }
+  },
+  adminDashboard: {
+    title: "Bảng Quản trị",
+    home: "Về trang chủ",
+    products: "Quản lý Sản phẩm",
+    categories: "Quản lý Danh mục",
+    orders: "Quản lý Đơn hàng",
+    customers: "Quản lý Khách hàng",
+    logout: "Đăng xuất"
+  },
+  dashboard: {
+    title: 'Tổng quan Dashboard',
+    stats: {
+      revenue: {
+        title: 'Tổng doanh thu',
+        desc: 'Tăng 15% so với tháng trước',
+      },
+      orders: {
+        title: 'Tổng đơn hàng',
+        desc: 'Giảm 5% so với tuần trước',
+      },
+      users: {
+        title: 'Tổng người dùng',
+        desc: 'Người dùng mới hôm nay: 120',
+      },
+      products: {
+        title: 'Tổng sản phẩm',
+        desc: 'Sản phẩm hết hàng: 15',
+      },
+    },
+    chartTitle: 'Biểu đồ Doanh thu hàng tháng',
+  },
+  adminProducts: {
+    title: 'Quản lý Sản phẩm',
+    add: 'Thêm sản phẩm Mới',
+    fetchError: 'Lỗi khi tải sản phẩm.',
+    deleteError: 'Không thể xóa sản phẩm. Vui lòng thử lại sau.',
+    image: 'Hình ảnh',
+    name: 'Tên sản phẩm',
+    price: 'Giá',
+    category: 'Danh mục',
+    stock: 'Số lượng',
+    actions: 'Hành động',
+    empty: 'Chưa có sản phẩm nào',
+    noImage: 'Không có ảnh',
+    noPrice: 'Chưa có giá',
+    noCategory: 'Không có danh mục',
+    edit: 'Sửa',
+    delete: 'Xóa'
+  },
 }; 

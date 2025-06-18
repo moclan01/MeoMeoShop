@@ -1,10 +1,12 @@
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import '../styles/Admin.css';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../common/LanguageSwitcher';
 
 function AdminDashboard({ onLogout }) {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const handleLogoutClick = () => {
     if (onLogout) {
       onLogout();
@@ -19,16 +21,29 @@ function AdminDashboard({ onLogout }) {
   return (
     <div className="admin-dashboard">
       <aside className="admin-sidebar">
-        <h3>Admin Panel</h3>
+        <div className="language-container">
+          <LanguageSwitcher />
+        </div>
+
+        <h3>{t('adminDashboard.title')}</h3>
         <nav>
           <ul>
             <li>
               <button
                 type="button"
                 className="nav-button"
+                onClick={() => handleNavigate('/')}
+              >
+                {t('adminDashboard.home')}
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                className="nav-button"
                 onClick={() => handleNavigate('/admin/products')}
               >
-                Quản lý Sản phẩm
+                {t('adminDashboard.products')}
               </button>
             </li>
             <li>
@@ -37,7 +52,7 @@ function AdminDashboard({ onLogout }) {
                 className="nav-button"
                 onClick={() => handleNavigate('/admin/categories')}
               >
-                Quản lý Danh mục
+                {t('adminDashboard.categories')}
               </button>
             </li>
             <li>
@@ -46,7 +61,7 @@ function AdminDashboard({ onLogout }) {
                 className="nav-button"
                 onClick={() => handleNavigate('/admin/orders')}
               >
-                Quản lý Đơn hàng
+                {t('adminDashboard.orders')}
               </button>
             </li>
             <li>
@@ -55,7 +70,7 @@ function AdminDashboard({ onLogout }) {
                 className="nav-button"
                 onClick={() => handleNavigate('/admin/customers')}
               >
-                Quản lý Khách hàng
+                {t('adminDashboard.customers')}
               </button>
             </li>
             {/* Add more admin navigation buttons here */}
@@ -65,7 +80,7 @@ function AdminDashboard({ onLogout }) {
                 className="admin-logout-button"
                 onClick={handleLogoutClick}
               >
-                Đăng xuất
+                {t('adminDashboard.logout')}
               </button>
             </li>
           </ul>
